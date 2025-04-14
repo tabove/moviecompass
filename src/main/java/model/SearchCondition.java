@@ -8,6 +8,7 @@ public class SearchCondition implements Serializable{
 	private String titleName;
 	private int movieTime;
 	private int ticketPrice;
+	private String url;
 	
 	public SearchCondition() {};
 	
@@ -36,6 +37,10 @@ public class SearchCondition implements Serializable{
 		return ticketPrice;
 	}
 	
+	public String getUrl() {
+		return url;
+	}
+	
 	//setter
 	public void setCinemaName(String cinemaName) {
 		this.cinemaName = cinemaName;
@@ -51,6 +56,10 @@ public class SearchCondition implements Serializable{
 	
 	public void setTicketPrice(int ticketPrice) {
 		this.ticketPrice = ticketPrice;
+	}
+	
+	public void seturl(String url) {
+		this.url = url;
 	}
 	
 }

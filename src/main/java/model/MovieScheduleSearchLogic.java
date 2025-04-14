@@ -1,5 +1,9 @@
 package model;
 
-public class MovieScheduleSearchLogic {
+import DAO.MovieScheduleDAO;
 
+public class MovieScheduleSearchLogic {
+	
+	MovieScheduleDAO dao = new MovieScheduleDAO();
+	
 }

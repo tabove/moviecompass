@@ -34,7 +34,7 @@ public class MovieScheduleDAO {
         if (title != null && !title.isEmpty()) {
             sql += " AND movie_id LIKE ?" ;  // 作品名の検索
         }
-        sql += " ORDER BY cinema_id ASC; " ;
+        sql += " ORDER BY movie_id ASC; " ;
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql)) {

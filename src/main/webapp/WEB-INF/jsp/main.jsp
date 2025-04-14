@@ -30,7 +30,7 @@
 	<div class="avengers">
 		
 	</div>
-	<form id="searchForm" action="Result" method="get">
+	<form id="searchForm" action="Main" method="get">
 	<table border="1">
 		<tr>
 			<td>
@@ -78,6 +78,7 @@
                 <td><%= sc.getTitleName() %></td>
                 <td><%= sc.getMovieTime() %></td>
                 <td><%= sc.getTicketPrice() %></td>
+                <td><a href="<%= sc.getUrl() %>">予約ページへ</a></td>
             </tr>
 			<% }%> 
 	</table>
