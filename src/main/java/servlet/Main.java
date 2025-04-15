@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -29,13 +30,15 @@ public class Main extends HttpServlet {
 		String genre = request.getParameter("genre");
 		String date = request.getParameter("date");
 		String dateTime = request.getParameter("dateTime");
+		 List<SearchCondition> results = new ArrayList<>();
 		
 		//パラメータが空の場合に、セッションから取得
 		HttpSession session = request.getSession();
-        if ((theater == null || theater.isEmpty()) &&(title == null || title.isEmpty()) ) {
-            theater = (String) session.getAttribute("selectedTheater");
-            title = (String) session.getAttribute("searchTitle");
-        }
+		 if (title != null && !title.isEmpty()) {
+			 //DAOに検索依頼
+            MovieScheduleDAO dao = new MovieScheduleDAO();
+            results = dao.searchTitle(title);
+    	}
         
         //nullチェック
         if(theater == null)theater = "";
@@ -45,12 +48,9 @@ public class Main extends HttpServlet {
         session.setAttribute("selectedTheater", theater);
         session.setAttribute("searchTitle", title);
         
-        //DAOに検索依頼
-        MovieScheduleDAO dao = new MovieScheduleDAO();
-        List<SearchCondition> searchList = dao.Title(title);
         
         //検索結果をリクエストスコープへ保存
-        request.setAttribute("searchCondition", searchList);
+        request.setAttribute("searchResults", results);
         
      // 結果ページへフォワード
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");

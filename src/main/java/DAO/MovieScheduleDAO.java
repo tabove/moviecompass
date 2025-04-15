@@ -26,27 +26,23 @@ public class MovieScheduleDAO {
     }
     
     //作品名部分一致検索
-    public List<SearchCondition> Title(String title) {
+    public List<SearchCondition> searchTitle(String title) {
         
     	List<SearchCondition> titleList = new ArrayList<>();
 
-        String sql = "SELECT Movie FROM movie_id WHERE 1=1" ;
-        if (title != null && !title.isEmpty()) {
-            sql += " AND movie_id LIKE ?" ;  // 作品名の検索
-        }
-        sql += " ORDER BY movie_id ASC; " ;
+        String sql = "SELECT c.cinema_name AS cinemaName, m.title AS titleName, m.runtime AS movieTime, m.ticket_price AS ticketPrice " +
+                "FROM movieschedule ms " +
+                "JOIN cinema c ON ms.cinema_id = c.cinema_id " +
+                "JOIN movie m ON ms.movie_id = m.movie_id " +
+                "WHERE m.title ILIKE ? " +
+                "ORDER BY m.title ASC;";
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql)) {
 
-            int index = 1;
-            if (title != null && !title.isEmpty()) {
-            	 // 部分一致検索
-                st.setString(index++, "%" + title + "%");
-            }
+        	st.setString(1, "%" + title + "%");
             
             ResultSet rs = st.executeQuery();
-            
             //結果の差し替え
     		titleList = makeTitleList(rs);
             
