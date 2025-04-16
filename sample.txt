@@ -1,0 +1,6 @@
+フォルダー パスの一覧
+ボリューム シリアル番号は 00000079 2880:8A29 です
+C:\PLEIADES\WEB_WORK\MOVIECOMPASS_SAMPLE\-F
+無効なパスです - \PLEIADES\WEB_WORK\MOVIECOMPASS_SAMPLE\-F
+サブフォルダーは存在しません 
+
