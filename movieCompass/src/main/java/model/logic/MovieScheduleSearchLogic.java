@@ -1,0 +1,19 @@
+package model.logic;
+
+import java.util.List;
+
+import DAO.MovieScheduleDAO;
+import model.data.MovieSchedule;
+
+public class MovieScheduleSearchLogic {
+	
+	private MovieScheduleDAO dao = new MovieScheduleDAO();
+	
+	/* 映画タイトル検索*/
+	public List<MovieSchedule> searchMovie(String movie_name, String cinema_name, String genre, String date, String dateTime) {
+	    if(date == null) date = "";
+	    if(dateTime == null) dateTime = "";
+	    
+	    return dao.searchMovie(movie_name, cinema_name, genre, date, dateTime);
+	}
+}
