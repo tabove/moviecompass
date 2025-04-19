@@ -29,6 +29,19 @@ public class Reservation implements Serializable {
 		this.torokubi = torokubi;
 		// 
 	}
+	
+	public Reservation(String reservation_id, String user_id, String cinema_id, String movie_id,
+		String movie_time, int ticket_price, String torokubi){
+		this.reservation_id = reservation_id;
+		this.user_id = user_id;
+		this.cinema_id = cinema_id;
+		this.movie_id = movie_id;
+		this.movie_time = movie_time;
+		this.ticket_price = ticket_price;
+		this.torokubi = torokubi;
+		// 
+	}
+	
 	public String getReservation_id() {
 		return reservation_id;
 	}

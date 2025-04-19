@@ -2,7 +2,7 @@ package model.data;
 
 import java.util.List;
 
-import DAO.MovieScheduleDAO;
+import dao.MovieScheduleDAO;
 
 public class GenreSearch {
 	

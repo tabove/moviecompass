@@ -2,7 +2,7 @@ package model.logic;
 
 import java.util.List;
 
-import DAO.MovieScheduleDAO;
+import dao.MovieScheduleDAO;
 import model.data.MovieSchedule;
 
 public class MovieScheduleSearchLogic {

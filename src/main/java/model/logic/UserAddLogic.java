@@ -1,6 +1,7 @@
-package model.data;
+package model.logic;
 
 import dao.UserDAO;
+import model.data.User;
 
 public class UserAddLogic{
 	
