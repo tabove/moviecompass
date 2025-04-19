@@ -33,11 +33,20 @@ public class Main extends HttpServlet {
 		MovieScheduleDAO dao = new MovieScheduleDAO();
 		
 		// パラメータ取得
+		String cinema_id = request.getParameter("cinema_id");
 		String cinema_name = request.getParameter("cinema_name");
-		String movie_name = request.getParameter("movieName");
+		String movie_name = request.getParameter("movie_name");
 	    String genre = request.getParameter("genre");
 	    String date = request.getParameter("date");
 	    String dateTime = request.getParameter("dateTime");
+	    
+	 // デバッグ出力を追加
+	    System.out.println("パラメータ確認: movie_name=" + movie_name + 
+	                      ", cinema_id=" + cinema_id + 
+	                      ", genre=" + genre + 
+	                      ", date=" + date + 
+	                      ", dateTime=" + dateTime);
+
 		
 	    // 検索に必要なリスト取得	
 	    List<TheaterSearch> theaterList = dao.theaterList();
@@ -49,7 +58,7 @@ public class Main extends HttpServlet {
 		genre = (genre != null) ? genre : "" ;
 		
 		// 検索処理
-		List<MovieSchedule> results = mssl.searchMovie(movie_name, cinema_name, genre, date, dateTime);
+		List<MovieSchedule> results = mssl.searchMovie(cinema_id,movie_name, cinema_name, genre, date, dateTime);
 		
 		// セッションに検索条件保存
 		session.setAttribute("genreList", genreList);

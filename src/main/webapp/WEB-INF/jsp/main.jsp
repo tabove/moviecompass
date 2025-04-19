@@ -22,10 +22,10 @@
         		<tr>
 	            	<td>
 		                映画館:
-						<select name="cinema_name">
+						<select name="cinema_id">
 						<option value=""></option>
 						<c:forEach var="theater" items="${theaterList}">
-						<option value="${theater.cinema_name}">${theater.cinema_name}</option>
+						<option value="${theater.cinema_id}">${theater.cinema_name}</option>
 						</c:forEach>
 						</select>
 		            </td>
@@ -118,11 +118,9 @@
 			  e[p] = adjustDate(d).toJSON().match(/\d+-\d+-\d+/);
 			
 			const dateElement = document.querySelector('input[name=date]');
-			
-			// valueを本日に設定
-			const d = new Date();
-			setDateElement(dateElement, 'value', d);
-			
+
+		    const d = new Date();
+						
 			// minを当日に設定
 			d.setTime(Date.now());
 			d.setDate(d.getDate());
