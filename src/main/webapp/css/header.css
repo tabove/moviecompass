@@ -93,6 +93,27 @@
   font-weight: 500;
 }
 
+/* メイン・ボディ  */
+
+#searchForm{
+	margin: 20px;
+}
+
+#searchForm table{
+	border-collapse: collapse;
+	width: 95%;
+}
+
+#searchForm th , #searchForm td{
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center; 
+}
+
+
+
+
+
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
   .header-container {
