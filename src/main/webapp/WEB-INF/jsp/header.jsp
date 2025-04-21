@@ -29,6 +29,7 @@
 </header>
 
 <!-- ヘッダー用CSS -->
+<link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/header.css">
 
 <!-- ログイン状態を判定するスクリプト -->

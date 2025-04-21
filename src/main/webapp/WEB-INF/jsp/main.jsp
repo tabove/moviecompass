@@ -8,6 +8,7 @@
 	<head>
 	    <meta charset="UTF-8">
 	    <title>MovieCompass</title>
+   	    <link rel="stylesheet" href="css/reset.css">
 	    <link rel="stylesheet" href="css/header.css">
 	    <link rel="stylesheet" href="css/style2.css">
 	</head>
@@ -41,57 +42,57 @@
 		</form>
 		
 		<h2>検索結果</h2>
-<%
-    List<MovieSchedule> searchResults = (List<MovieSchedule>) request.getAttribute("searchResults");
+		<%
+    		List<MovieSchedule> searchResults = (List<MovieSchedule>) request.getAttribute("searchResults");
     
-    if (searchResults != null && !searchResults.isEmpty()) {
-%>
-<div class="movie-list-view">
-<%
-    // 日付ごとにグループ化
-    Map<String, List<MovieSchedule>> schedulesByDate = new HashMap<>();
+			if (searchResults != null && !searchResults.isEmpty()) {
+		%>
+		<div class="movie-list-view">
+		<%
+			// 日付ごとにグループ化
+			Map<String, List<MovieSchedule>> schedulesByDate = new HashMap<>();
     
-    for (MovieSchedule schedule : searchResults) {
-        if (!schedulesByDate.containsKey(schedule.getMovie_date())) {
-            schedulesByDate.put(schedule.getMovie_date(), new ArrayList<>());
-        }
-        schedulesByDate.get(schedule.getMovie_date()).add(schedule);
-    }
+			for (MovieSchedule schedule : searchResults) {
+				if (!schedulesByDate.containsKey(schedule.getMovie_date())) {
+					schedulesByDate.put(schedule.getMovie_date(), new ArrayList<>());
+				}
+				schedulesByDate.get(schedule.getMovie_date()).add(schedule);
+    		}
     
-    // 日付ごとに処理
-    for (Map.Entry<String, List<MovieSchedule>> dateEntry : schedulesByDate.entrySet()) {
-        String date = dateEntry.getKey();
-        List<MovieSchedule> schedulesForDate = dateEntry.getValue();
-%>
-    <div class="date-section">
+		// 日付ごとに処理
+		for (Map.Entry<String, List<MovieSchedule>> dateEntry : schedulesByDate.entrySet()) {
+			String date = dateEntry.getKey();
+			List<MovieSchedule> schedulesForDate = dateEntry.getValue();
+		%>
+    	<div class="date-section">
         <h3 class="date-heading"><%= date %></h3>
-<%
-        // 映画館ごとにグループ化
-        Map<String, List<MovieSchedule>> schedulesByCinema = new HashMap<>();
+		<%
+			// 映画館ごとにグループ化
+			Map<String, List<MovieSchedule>> schedulesByCinema = new HashMap<>();
+			
+			for (MovieSchedule schedule : schedulesForDate) {
+				if (!schedulesByCinema.containsKey(schedule.getCinema_name())) {
+					schedulesByCinema.put(schedule.getCinema_name(), new ArrayList<>());
+				}
+			schedulesByCinema.get(schedule.getCinema_name()).add(schedule);
+			}
         
-        for (MovieSchedule schedule : schedulesForDate) {
-            if (!schedulesByCinema.containsKey(schedule.getCinema_name())) {
-                schedulesByCinema.put(schedule.getCinema_name(), new ArrayList<>());
-            }
-            schedulesByCinema.get(schedule.getCinema_name()).add(schedule);
-        }
-        
-        // 映画館ごとに処理
-        for (Map.Entry<String, List<MovieSchedule>> cinemaEntry : schedulesByCinema.entrySet()) {
-            String cinemaName = cinemaEntry.getKey();
-            List<MovieSchedule> schedulesForCinema = cinemaEntry.getValue();
-%>
-        <div class="cinema-section">
-            <div class="cinema-header">
-                <div class="cinema-name"><%= cinemaName %></div>
+			// 映画館ごとに処理
+			for (Map.Entry<String, List<MovieSchedule>> cinemaEntry : schedulesByCinema.entrySet()) {
+				String cinemaName = cinemaEntry.getKey();
+				List<MovieSchedule> schedulesForCinema = cinemaEntry.getValue();
+		%>
+		<div class="cinema-section">
+			<div class="cinema-header">
+				<div class="cinema-name"><a href="CinemaDetail?cinema_id=<%= schedulesForCinema.get(0).getCinema_id() %>"><%= cinemaName %></a></div>
             </div>
             
-<%
-            // 映画ごとにグループ化
-            Map<String, List<MovieSchedule>> schedulesByMovie = new HashMap<>();
-            
-            for (MovieSchedule schedule : schedulesForCinema) {
-                if (!schedulesByMovie.containsKey(schedule.getMovie_name())) {
+		<%
+			// 映画ごとにグループ化
+			Map<String, List<MovieSchedule>> schedulesByMovie = new HashMap<>();
+			
+			for (MovieSchedule schedule : schedulesForCinema) {
+				if (!schedulesByMovie.containsKey(schedule.getMovie_name())) {
                     schedulesByMovie.put(schedule.getMovie_name(), new ArrayList<>());
                 }
                 schedulesByMovie.get(schedule.getMovie_name()).add(schedule);
@@ -106,7 +107,7 @@
                 for (MovieSchedule schedule : schedulesForMovie) {
 %>
                 <div class="movie-row">
-                    <div class="movie-name"><%= movieName %></div>
+                    <div class="movie-name"><a href="MovieDetail?movie_id=<%= schedule.getMovie_id() %>"><%= movieName %></a></div>
                     <div class="movie-time"><%= schedule.getMovie_hour() %></div>
                     <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
                     <div class="movie-action">
@@ -116,7 +117,9 @@
                             <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
                             <input type="hidden" name="movie_name" value="<%= schedule.getMovie_name() %>">
                             <input type="hidden" name="ticket_price" value="<%= schedule.getTicket_price() %>">
-                            <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_time() %>">
+                            <input type="hidden" name="movie_time" value="<%= schedule.getMovie_time() %>">
+                            <input type="hidden" name="movie_date" value="<%= schedule.getMovie_date() %>">
+                            <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_hour() %>">
                             <button type="submit" class="reservation-btn">予約する</button>
                         </form>
                     </div>

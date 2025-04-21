@@ -36,6 +36,7 @@ public class Main extends HttpServlet {
 		String cinema_id = request.getParameter("cinema_id");
 		String cinema_name = request.getParameter("cinema_name");
 		String movie_name = request.getParameter("movie_name");
+		String movie_id = request.getParameter("movie_id");
 	    String genre = request.getParameter("genre");
 	    String date = request.getParameter("date");
 	    String dateTime = request.getParameter("dateTime");
@@ -58,7 +59,7 @@ public class Main extends HttpServlet {
 		genre = (genre != null) ? genre : "" ;
 		
 		// 検索処理
-		List<MovieSchedule> results = mssl.searchMovie(cinema_id,movie_name, cinema_name, genre, date, dateTime);
+		List<MovieSchedule> results = mssl.searchMovie(cinema_id,movie_name, cinema_name, movie_id, genre, date, dateTime);
 		
 		// セッションに検索条件保存
 		session.setAttribute("genreList", genreList);

@@ -13,9 +13,11 @@ public class MovieSchedule {
 		
 		public MovieSchedule() {}
 		
-		public MovieSchedule(String cinema_name, String movie_name,
+		public MovieSchedule(String cinema_name,String cinema_id, String movie_name, String movie_id,
 				String movie_time, String movie_date, String movie_hour, int ticket_price){
+			this.cinema_id = cinema_id;
 			this.cinema_name = cinema_name;
+			this.movie_id = movie_id;
 			this.movie_name = movie_name;
 			this.movie_time = movie_time;
 			this.movie_date = movie_date;
@@ -59,16 +61,10 @@ public class MovieSchedule {
 			return movie_date;
 		}
 		
-		public void setMovie_date(String movie_date) {
-			this.movie_date = movie_date;
-		}
 		
 		public String getMovie_hour() {
 			return movie_hour;
 		}
 		
-		public void setMovie_hour(String movie_hour) {
-			this.movie_hour = movie_hour;
-		}
 }
 

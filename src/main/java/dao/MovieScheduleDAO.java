@@ -30,7 +30,7 @@ public class MovieScheduleDAO {
     }
     
     //作品名の部分一致検索をしてくれるメソッド君
-    public List<MovieSchedule> searchMovie(String cinema_id,String movie_name, String cinema_name, String genre, String date, String dateTime) {
+    public List<MovieSchedule> searchMovie(String cinema_id,String movie_name, String cinema_name, String movie_id, String genre, String date, String dateTime) {
     	List<MovieSchedule> movieList = new ArrayList<>();
         
     	 // デバッグ出力：受け取ったパラメータの確認
@@ -41,7 +41,7 @@ public class MovieScheduleDAO {
                           ", dateTime=" + dateTime);
     	
         StringBuilder sql = new StringBuilder(
-            "SELECT c.cinema_name AS cinema_name, m.movie_name AS movie_name, " +
+            "SELECT c.cinema_name AS cinema_name, c.cinema_id AS cinema_id, m.movie_name AS movie_name, m.movie_id AS movie_id, " +
             "ms.movie_time AS movie_time, ms.ticket_price AS ticket_price, m.movie_genre AS genre " +
             "FROM movieschedule ms " +
             "JOIN cinema c ON ms.cinema_id = c.cinema_id " +
@@ -62,11 +62,17 @@ public class MovieScheduleDAO {
             }
         }
         
-     // 映画名の条件
+        // 映画名の条件
         if (movie_name != null && !movie_name.isEmpty()) {
         	System.out.println("映画名条件を追加: " + movie_name);
             conditions.add("LOWER(m.movie_name) LIKE LOWER(?)");
             params.add("%" + movie_name + "%");
+        }
+        
+        // 映画idの条件
+        if (movie_id != null && !movie_id.isEmpty()) {
+            conditions.add("LOWER(m.movie_id) LIKE LOWER(?)");
+            params.add("%" + movie_id + "%");
         }
 
         // ジャンルの条件
@@ -97,6 +103,7 @@ public class MovieScheduleDAO {
         //デバッグ出力
 		System.out.println("実行するSQL: " + sql);
 		System.out.println("バインドパラメータ: " + params);
+		System.out.println("バインドパラメータ: " + movie_id);
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql.toString())) {
@@ -184,6 +191,8 @@ public class MovieScheduleDAO {
 	
     	while(rs.next()) {
 			String cinema_name = rs.getString("cinema_name");
+			String cinema_id = rs.getString("cinema_id");
+			String movie_id = rs.getString("movie_id");
 			String movie_name = rs.getString("movie_name");
 			String movie_time = rs.getString("movie_time");
 			int ticket_price = rs.getInt("ticket_price");
@@ -195,7 +204,9 @@ public class MovieScheduleDAO {
 			
 			//1行分のデータを格納するインスタンス
 			MovieSchedule search = new MovieSchedule(cinema_name,
+													cinema_id,
 													movie_name,
+													movie_id,
 													movie_time,
 													movie_date,
 													movie_hour,
