@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="javax.servlet.http.*, javax.servlet.*" %>
 
 <!-- ヘッダーナビゲーション -->
@@ -12,7 +12,7 @@
     <nav class="header-nav">
       <!-- 未ログイン時の表示 -->
       <div id="guest-menu" class="nav-menu">
-        <a href="Register" class="nav-button register-btn">ユーザー登録</a>
+        <a href="RegisterUser" class="nav-button register-btn">ユーザー登録</a>
         <a href="Login" class="nav-button login-btn">ログイン</a>
       </div>
       

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="model.data.SearchCondition, model.data.MovieSchedule" %>
 <%@ page import="java.util.List,java.util.Map, java.util.Set, java.util.HashMap, java.util.HashSet, java.util.ArrayList" %>
 <%@ include file="header.jsp" %>
@@ -8,8 +8,6 @@
 	<head>
 	    <meta charset="UTF-8">
 	    <title>MovieCompass</title>
-   	    <link rel="stylesheet" href="css/reset.css">
-	    <link rel="stylesheet" href="css/header.css">
 	    <link rel="stylesheet" href="css/style2.css">
 	</head>
 	<body>

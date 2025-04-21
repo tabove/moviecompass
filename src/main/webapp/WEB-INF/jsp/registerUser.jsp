@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="header.jsp" %>
 <% // 結果メッセージをリクエストスコープから取得
 String message = (String)request.getAttribute("message");
 if (message == null) {
@@ -30,5 +31,5 @@ if (message == null) {
 <input type="submit" value="ログイン"><br><br>
 <a href="Main">映画館・上映作品を探す</a></p><br><br>
 </form>
-</body>s
+</body>
 </html>
