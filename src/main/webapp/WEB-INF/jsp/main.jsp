@@ -108,29 +108,37 @@
                 String movieName = movieEntry.getKey();
                 List<MovieSchedule> schedulesForMovie = movieEntry.getValue();
                 
-                // 各時間ごとに行を生成
-                for (MovieSchedule schedule : schedulesForMovie) {
+             // 最初の映画情報を取得して共通情報を表示
+                MovieSchedule firstSchedule = schedulesForMovie.get(0);
 %>
                 <div class="movie-row">
-                    <div class="movie-name"><a href="MovieDetail?movie_id=<%= schedule.getMovie_id() %>"><%= movieName %></a></div>
-                    <div class="movie-time"><%= schedule.getMovie_hour() %></div>
-                    <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
-                    <div class="movie-action">
-                        <form action="ReserveCinema" method="POST">
-                            <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
-                            <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
-                            <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
-                            <input type="hidden" name="movie_name" value="<%= schedule.getMovie_name() %>">
-                            <input type="hidden" name="ticket_price" value="<%= schedule.getTicket_price() %>">
-                            <input type="hidden" name="movie_time" value="<%= schedule.getMovie_time() %>">
-                            <input type="hidden" name="movie_date" value="<%= schedule.getMovie_date() %>">
-                            <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_hour() %>">
-                            <button type="submit" class="reservation-btn">予約する</button>
-                        </form>
+                    <div class="movie-name"><a href="MovieDetail?movie_id=<%= firstSchedule.getMovie_id() %>"><%= movieName %></a></div>
+                    <div class="schedule-container">
+                        <% 
+                        // 各時間ごとに行を生成
+                        for (MovieSchedule schedule : schedulesForMovie) {
+                        %>
+                        <div class="movie-row">
+                            <div class="movie-time"><%= schedule.getMovie_hour() %></div>
+                            <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
+                            <div class="movie-action">
+                            <form action="Reservation" method="POST">
+                                <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
+                                <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
+                                <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
+                                <input type="hidden" name="movie_name" value="<%= schedule.getMovie_name() %>">
+                                <input type="hidden" name="ticket_price" value="<%= schedule.getTicket_price() %>">
+                                <input type="hidden" name="movie_time" value="<%= schedule.getMovie_time() %>">
+                                <input type="hidden" name="movie_date" value="<%= schedule.getMovie_date() %>">
+                                <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_hour() %>">
+                                <button type="submit" class="reservation-btn">予約</button>
+                               </form>
+                            </div>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
 <%
-                }
             }
 %>
         </div>
