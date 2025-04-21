@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import dao.MovieScheduleDAO;
 import model.data.GenreSearch;
 import model.data.MovieSchedule;
+import model.data.SearchCondition;
 import model.data.TheaterSearch;
 import model.logic.MovieScheduleSearchLogic;
 
@@ -24,13 +25,13 @@ import model.logic.MovieScheduleSearchLogic;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
 		MovieScheduleSearchLogic mssl = new MovieScheduleSearchLogic();
 		GenreSearch gs = new GenreSearch();
 		MovieScheduleDAO dao = new MovieScheduleDAO();
+		SearchCondition searchCondition = new SearchCondition();
 		
 		// パラメータ取得
 		String cinema_id = request.getParameter("cinema_id");
@@ -41,17 +42,18 @@ public class Main extends HttpServlet {
 	    String date = request.getParameter("date");
 	    String dateTime = request.getParameter("dateTime");
 	    
-	 // デバッグ出力を追加
-	    System.out.println("パラメータ確認: movie_name=" + movie_name + 
-	                      ", cinema_id=" + cinema_id + 
-	                      ", genre=" + genre + 
-	                      ", date=" + date + 
-	                      ", dateTime=" + dateTime);
+//	 // デバッグ出力を追加
+//	    System.out.println("パラメータ確認: movie_name=" + movie_name + 
+//	                      ", cinema_id=" + cinema_id + 
+//	                      ", genre=" + genre + 
+//	                      ", date=" + date + 
+//	                      ", dateTime=" + dateTime);
 
 		
 	    // 検索に必要なリスト取得	
 	    List<TheaterSearch> theaterList = dao.theaterList();
 	    List<String> genreList = gs.getGenreList();
+	    
 	    
 		// Nullチェック（リファクタリング）
 		cinema_name = (cinema_name != null) ? cinema_name : "";
@@ -64,7 +66,7 @@ public class Main extends HttpServlet {
 		// セッションに検索条件保存
 		session.setAttribute("genreList", genreList);
 		session.setAttribute("theaterList", theaterList);
-		
+
 		// 検索結果をリクエストスコープへ保存
 		request.setAttribute("searchResults", results);
 		
@@ -72,7 +74,7 @@ public class Main extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
 		dispatcher.forward(request, response);
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}

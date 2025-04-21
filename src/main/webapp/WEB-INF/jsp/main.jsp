@@ -11,29 +11,36 @@
 	    <link rel="stylesheet" href="css/style2.css">
 	</head>
 	<body>
+
 		<form id="searchForm" action="Main" method="get">
     		<table border="1">
         		<tr>
 	            	<td>
 		                映画館:
 						<select name="cinema_id">
-						<option value=""></option>
+						<option value="">
+							<c:forEach var="theater" items="${theaterList}">
+							<c:if test="${theater.cinema_id == param.cinema_id}">
+								${theater.cinema_name}
+							</c:if>
+						</c:forEach>
+						</option>
 						<c:forEach var="theater" items="${theaterList}">
 						<option value="${theater.cinema_id}">${theater.cinema_name}</option>
 						</c:forEach>
 						</select>
 		            </td>
-		            <td>作品名:<input type="text" name="movie_name" placeholder="作品名を入力するのDA!!"></td>
+		            <td>作品名:<input type="text" name="movie_name" placeholder="作品名を入力してください" value="${param.movie_name}"></td>
 		            <td><label for="genre">ジャンル:</label>
 		            	<select name="genre">
-		            		<option></option>
+		            		<option value="">${param.genre}</option>
 		                    <c:forEach var="genre" items="${genreList}">
-		                    	<option value="${genre}">${genre}</option>
+		                    	<option value="${genre}" >${genre}</option>
 		                    </c:forEach>
 		                </select>
 		            </td>
-		            <td>日付<input type="date" name="date"></td>
-		            <td>時間<input type="time" name="dateTime"></td>
+		            <td>日付<input type="date" name="date" value="${param.date}"></td>
+		            <td>時間<input type="time" name="dateTime" value="${param.dateTime}"></td>
 		        </tr>
 		    </table>
 	    <input type="submit" value="検索">
@@ -109,7 +116,7 @@
                     <div class="movie-time"><%= schedule.getMovie_hour() %></div>
                     <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
                     <div class="movie-action">
-                        <form action="Reservation" method="POST">
+                        <form action="ReserveCinema" method="POST">
                             <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
                             <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
                             <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
@@ -306,6 +313,27 @@
         // テーブルをカード表示に置き換え
         resultTable.parentNode.replaceChild(searchResults, resultTable);
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    	  // 予約ボタンにイベントリスナーを追加
+    	  const reservationButtons = document.querySelectorAll('.reservation-btn');
+    	  
+    	  reservationButtons.forEach(button => {
+    	    button.addEventListener('click', function(event) {
+    	      // セッションから取得したログイン状態を使用（header.jspにある変数を利用）
+    	      var isLoggedIn = <%= session.getAttribute("user_id") != null %>;
+    	      
+    	      if (!isLoggedIn) {
+    	        event.preventDefault(); // フォーム送信をキャンセル
+    	        
+    	        // ログインページにリダイレクト（現在のURLをパラメータとして渡す）
+    	        const currentUrl = encodeURIComponent(window.location.href);
+    	        window.location.href = 'Login?redirect=' + currentUrl;
+    	      }
+    	      // ログイン済みの場合は、フォームがそのまま送信される
+    	    });
+    	  });
+    	});
 </script>
 	</body>
 </html>

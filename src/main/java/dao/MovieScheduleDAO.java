@@ -89,7 +89,7 @@ public class MovieScheduleDAO {
 
         // 時間の条件
         if (dateTime != null && !dateTime.isEmpty()) {
-            conditions.add("TIME(ms.movie_time) >= ?::time");
+            conditions.add("TIME(ms.movie_time) >= ?::dateTime");
             params.add(dateTime);
         }
         
@@ -100,10 +100,10 @@ public class MovieScheduleDAO {
         
         sql.append(" ORDER BY c.cinema_name, m.movie_name, ms.movie_time ASC ");
         
-        //デバッグ出力
-		System.out.println("実行するSQL: " + sql);
-		System.out.println("バインドパラメータ: " + params);
-		System.out.println("バインドパラメータ: " + movie_id);
+//        //デバッグ出力
+//		System.out.println("実行するSQL: " + sql);
+//		System.out.println("バインドパラメータ: " + params);
+//		System.out.println("バインドパラメータ: " + movie_id);
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql.toString())) {
