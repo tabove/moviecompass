@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -89,8 +91,10 @@ public class MovieScheduleDAO {
 
         // 時間の条件
         if (dateTime != null && !dateTime.isEmpty()) {
-            conditions.add("TIME(ms.movie_time) >= ?::dateTime");
-            params.add(dateTime);
+        	LocalDate today = LocalDate.now();
+            String fullDateTime = today + " " + dateTime + ":00"; // フルタイムスタンプ形式を生成
+            params.add(Timestamp.valueOf(fullDateTime));
+
         }
         
         // conditionの中身チェックからのSQL文に追加

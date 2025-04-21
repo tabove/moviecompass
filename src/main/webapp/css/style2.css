@@ -2,79 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 
- /* 新しいスタイル - 横一列のリスト表示用 */
+ /* レイアウト全体の調整 */
 .movie-list-view {
   width: 100%;
   font-family: 'Noto Sans JP', sans-serif;
   padding: 20px;
 }
 
-.cinema-header {
-  background-color: #f8f9fa;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.cinema-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #444;
-}
-
-.movie-row {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  background-color: #fff;
-  border-radius: 6px;
-  margin-bottom: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: background-color 0.2s ease;
-}
-
-.movie-row:hover {
-  background-color: #f8f9fa;
-}
-
-.movie-name {
-  flex: 2;
-  font-weight: 500;
-  color: #333;
-  padding-right: 15px;
-}
-
-.movie-time {
-  flex: 1;
-  text-align: center;
-  font-weight: 500;
-}
-
-.movie-price {
-  flex: 1;
-  text-align: center;
-  color: #666;
-}
-
-.movie-action {
-  flex: 1;
-  text-align: right;
-}
-
-.reservation-btn {
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.reservation-btn:hover {
-  background: linear-gradient(135deg, #43a047, #2e7d32);
+/* 日付セクション調整 */
+.date-section {
+  margin-bottom: 30px;
 }
 
 .date-heading {
@@ -88,4 +25,214 @@
   top: 50px;
   background-color: #fff;
   z-index: 10;
+}
+
+/* 映画館セクション */
+.cinema-section {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.cinema-header {
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.cinema-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* メインコンテンツ部分を分割 */
+.schedule-container {
+  width: 75%; /* 左側の領域を75%に */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 映画のタイトル表示 */
+.movie-title-section {
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background-color: #f9f9f9;
+  border-radius: 6px 6px 0 0;
+  border-left: 4px solid #ff416c;
+}
+
+.movie-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 映画の行 - コンパクト化 */
+.movie-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: #fff;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.movie-row:hover {
+  background-color: #f8f9fa;
+}
+
+/* 各要素の幅調整 */
+.movie-time {
+  width: 25%;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+.movie-price {
+  width: 25%;
+  text-align: center;
+  color: #666;
+}
+
+.movie-action {
+  width: 50%;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.reservation-btn {
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 90px;
+}
+
+.reservation-btn:hover {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+}
+
+/* 右側のプロモーションエリア */
+.promo-area {
+  width: 25%;
+  padding-left: 20px;
+  position: sticky;
+  top: 100px;
+}
+
+.promo-content {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.promo-image {
+  width: 100%;
+  display: block;
+}
+
+.promo-info {
+  background-color: #222;
+  color: #fff;
+  padding: 15px;
+}
+
+.promo-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.promo-subtitle {
+  font-size: 0.9rem;
+  color: #ddd;
+  margin-bottom: 12px;
+}
+
+.promo-description {
+  font-size: 0.85rem;
+  color: #bbb;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.promo-release {
+  font-size: 0.85rem;
+  color: #ff416c;
+  font-weight: 500;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 992px) {
+  .cinema-section {
+    flex-direction: column;
+  }
+  
+  .schedule-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .promo-area {
+    width: 100%;
+    padding-left: 0;
+    position: static;
+  }
+  
+  .promo-image {
+    max-height: 300px;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-row {
+    padding: 10px;
+  }
+  
+  .movie-time, .movie-price {
+    font-size: 0.9rem;
+  }
+  
+  .reservation-btn {
+    width: 80px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .movie-row {
+    flex-wrap: wrap;
+  }
+  
+  .movie-time {
+    width: 50%;
+    text-align: left;
+  }
+  
+  .movie-price {
+    width: 50%;
+    text-align: right;
+  }
+  
+  .movie-action {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .reservation-btn {
+    width: 100%;
+  }
 }

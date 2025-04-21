@@ -5,154 +5,169 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-	<head>
-	    <meta charset="UTF-8">
-	    <title>MovieCompass</title>
-	    <link rel="stylesheet" href="css/style2.css">
-	</head>
-	<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>MovieCompass</title>
+        <link rel="stylesheet" href="css/style2.css">
+    </head>
+    <body>
 
-		<form id="searchForm" action="Main" method="get">
-    		<table border="1">
-        		<tr>
-	            	<td>
-		                映画館:
-						<select name="cinema_id">
-						<option value="">
-							<c:forEach var="theater" items="${theaterList}">
-							<c:if test="${theater.cinema_id == param.cinema_id}">
-								${theater.cinema_name}
-							</c:if>
-						</c:forEach>
-						</option>
-						<c:forEach var="theater" items="${theaterList}">
-						<option value="${theater.cinema_id}">${theater.cinema_name}</option>
-						</c:forEach>
-						</select>
-		            </td>
-		            <td>作品名:<input type="text" name="movie_name" placeholder="作品名を入力してください" value="${param.movie_name}"></td>
-		            <td><label for="genre">ジャンル:</label>
-		            	<select name="genre">
-		            		<option value="">${param.genre}</option>
-		                    <c:forEach var="genre" items="${genreList}">
-		                    	<option value="${genre}" >${genre}</option>
-		                    </c:forEach>
-		                </select>
-		            </td>
-		            <td>日付<input type="date" name="date" value="${param.date}"></td>
-		            <td>時間<input type="time" name="dateTime" value="${param.dateTime}"></td>
-		        </tr>
-		    </table>
-	    <input type="submit" value="検索">
-		</form>
-		
-		<h2>検索結果</h2>
-		<%
-    		List<MovieSchedule> searchResults = (List<MovieSchedule>) request.getAttribute("searchResults");
-    
-			if (searchResults != null && !searchResults.isEmpty()) {
-		%>
-		<div class="movie-list-view">
-		<%
-			// 日付ごとにグループ化
-			Map<String, List<MovieSchedule>> schedulesByDate = new HashMap<>();
-    
-			for (MovieSchedule schedule : searchResults) {
-				if (!schedulesByDate.containsKey(schedule.getMovie_date())) {
-					schedulesByDate.put(schedule.getMovie_date(), new ArrayList<>());
-				}
-				schedulesByDate.get(schedule.getMovie_date()).add(schedule);
-    		}
-    
-		// 日付ごとに処理
-		for (Map.Entry<String, List<MovieSchedule>> dateEntry : schedulesByDate.entrySet()) {
-			String date = dateEntry.getKey();
-			List<MovieSchedule> schedulesForDate = dateEntry.getValue();
-		%>
-    	<div class="date-section">
-        <h3 class="date-heading"><%= date %></h3>
-		<%
-			// 映画館ごとにグループ化
-			Map<String, List<MovieSchedule>> schedulesByCinema = new HashMap<>();
-			
-			for (MovieSchedule schedule : schedulesForDate) {
-				if (!schedulesByCinema.containsKey(schedule.getCinema_name())) {
-					schedulesByCinema.put(schedule.getCinema_name(), new ArrayList<>());
-				}
-			schedulesByCinema.get(schedule.getCinema_name()).add(schedule);
-			}
-        
-			// 映画館ごとに処理
-			for (Map.Entry<String, List<MovieSchedule>> cinemaEntry : schedulesByCinema.entrySet()) {
-				String cinemaName = cinemaEntry.getKey();
-				List<MovieSchedule> schedulesForCinema = cinemaEntry.getValue();
-		%>
-		<div class="cinema-section">
-			<div class="cinema-header">
-				<div class="cinema-name"><a href="CinemaDetail?cinema_id=<%= schedulesForCinema.get(0).getCinema_id() %>"><%= cinemaName %></a></div>
-            </div>
-            
-		<%
-			// 映画ごとにグループ化
-			Map<String, List<MovieSchedule>> schedulesByMovie = new HashMap<>();
-			
-			for (MovieSchedule schedule : schedulesForCinema) {
-				if (!schedulesByMovie.containsKey(schedule.getMovie_name())) {
-                    schedulesByMovie.put(schedule.getMovie_name(), new ArrayList<>());
+        <form id="searchForm" action="Main" method="get">
+            <table border="1">
+                <tr>
+                    <td>
+                        映画館:
+                        <select name="cinema_id">
+                            <option value="">
+                                <c:forEach var="theater" items="${theaterList}">
+                                    <c:if test="${theater.cinema_id == param.cinema_id}">
+                                        ${theater.cinema_name}
+                                    </c:if>
+                                </c:forEach>
+                            </option>
+                            <c:forEach var="theater" items="${theaterList}">
+                                <option value="${theater.cinema_id}">${theater.cinema_name}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                    <td>作品名:
+                        <input type="text" name="movie_name" placeholder="作品名を入力してください" value="${param.movie_name}">
+                    </td>
+                    <td>
+                        <label for="genre">ジャンル:</label>
+                        <select name="genre">
+                            <option value="">${param.genre}</option>
+                            <c:forEach var="genre" items="${genreList}">
+                                <option value="${genre}">${genre}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                    <td>日付
+                        <input type="date" name="date" value="${param.date}">
+                    </td>
+                    <td>時間
+                        <input type="time" name="dateTime" value="${param.dateTime}">
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="検索">
+        </form>
+
+        <h2>検索結果</h2>
+        <%
+            List<MovieSchedule> searchResults = (List<MovieSchedule>) request.getAttribute("searchResults");
+
+            if (searchResults != null && !searchResults.isEmpty()) {
+        %>
+        <div class="movie-list-view">
+            <%
+                Map<String, List<MovieSchedule>> schedulesByDate = new HashMap<>();
+
+                for (MovieSchedule schedule : searchResults) {
+                    if (!schedulesByDate.containsKey(schedule.getMovie_date())) {
+                        schedulesByDate.put(schedule.getMovie_date(), new ArrayList<>());
+                    }
+                    schedulesByDate.get(schedule.getMovie_date()).add(schedule);
                 }
-                schedulesByMovie.get(schedule.getMovie_name()).add(schedule);
-            }
-            
-            // 映画ごとに処理
-            for (Map.Entry<String, List<MovieSchedule>> movieEntry : schedulesByMovie.entrySet()) {
-                String movieName = movieEntry.getKey();
-                List<MovieSchedule> schedulesForMovie = movieEntry.getValue();
-                
-             // 最初の映画情報を取得して共通情報を表示
-                MovieSchedule firstSchedule = schedulesForMovie.get(0);
-%>
-                <div class="movie-row">
-                    <div class="movie-name"><a href="MovieDetail?movie_id=<%= firstSchedule.getMovie_id() %>"><%= movieName %></a></div>
+
+                for (Map.Entry<String, List<MovieSchedule>> dateEntry : schedulesByDate.entrySet()) {
+                    String date = dateEntry.getKey();
+                    List<MovieSchedule> schedulesForDate = dateEntry.getValue();
+            %>
+            <div class="date-section">
+                <h3 class="date-heading"><%= date %></h3>
+                <%
+                    Map<String, List<MovieSchedule>> schedulesByCinema = new HashMap<>();
+
+                    for (MovieSchedule schedule : schedulesForDate) {
+                        if (!schedulesByCinema.containsKey(schedule.getCinema_name())) {
+                            schedulesByCinema.put(schedule.getCinema_name(), new ArrayList<>());
+                        }
+                        schedulesByCinema.get(schedule.getCinema_name()).add(schedule);
+                    }
+
+                    for (Map.Entry<String, List<MovieSchedule>> cinemaEntry : schedulesByCinema.entrySet()) {
+                        String cinemaName = cinemaEntry.getKey();
+                        List<MovieSchedule> schedulesForCinema = cinemaEntry.getValue();
+                %>
+                <div class="cinema-header">
+                    <div class="cinema-name">
+                        <a href="CinemaDetail?cinema_id=<%= schedulesForCinema.get(0).getCinema_id() %>">
+                            <%= cinemaName %>
+                        </a>
+                    </div>
+                </div>
+
+                <%
+                    Map<String, List<MovieSchedule>> schedulesByMovie = new HashMap<>();
+
+                    for (MovieSchedule schedule : schedulesForCinema) {
+                        if (!schedulesByMovie.containsKey(schedule.getMovie_name())) {
+                            schedulesByMovie.put(schedule.getMovie_name(), new ArrayList<>());
+                        }
+                        schedulesByMovie.get(schedule.getMovie_name()).add(schedule);
+                    }
+
+                    for (Map.Entry<String, List<MovieSchedule>> movieEntry : schedulesByMovie.entrySet()) {
+                        String movieName = movieEntry.getKey();
+                        List<MovieSchedule> schedulesForMovie = movieEntry.getValue();
+
+                        MovieSchedule firstSchedule = schedulesForMovie.get(0);
+                %>
+                <div class="cinema-section">
                     <div class="schedule-container">
-                        <% 
-                        // 各時間ごとに行を生成
-                        for (MovieSchedule schedule : schedulesForMovie) {
-                        %>
+                        <div class="movie-title-section">
+                            <div class="movie-title">
+                                <a href="MovieDetail?movie_id=<%= firstSchedule.getMovie_id() %>">
+                                    <%= movieName %>
+                                </a>
+                            </div>
+                        </div>
+
+                        <% for (MovieSchedule schedule : schedulesForMovie) { %>
                         <div class="movie-row">
                             <div class="movie-time"><%= schedule.getMovie_hour() %></div>
                             <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
                             <div class="movie-action">
-                            <form action="Reservation" method="POST">
-                                <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
-                                <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
-                                <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
-                                <input type="hidden" name="movie_name" value="<%= schedule.getMovie_name() %>">
-                                <input type="hidden" name="ticket_price" value="<%= schedule.getTicket_price() %>">
-                                <input type="hidden" name="movie_time" value="<%= schedule.getMovie_time() %>">
-                                <input type="hidden" name="movie_date" value="<%= schedule.getMovie_date() %>">
-                                <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_hour() %>">
-                                <button type="submit" class="reservation-btn">予約</button>
-                               </form>
+                                <form action="Reservation" method="POST">
+                                    <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
+                                    <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
+                                    <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
+                                    <input type="hidden" name="movie_name" value="<%= schedule.getMovie_name() %>">
+                                    <input type="hidden" name="ticket_price" value="<%= schedule.getTicket_price() %>">
+                                    <input type="hidden" name="movie_time" value="<%= schedule.getMovie_time() %>">
+                                    <input type="hidden" name="movie_date" value="<%= schedule.getMovie_date() %>">
+                                    <input type="hidden" name="movie_hour" value="<%= schedule.getMovie_hour() %>">
+                                    <button type="submit" class="reservation-btn">予約</button>
+                                </form>
                             </div>
                         </div>
                         <% } %>
                     </div>
+                    <div class="promo-area">
+                        <div class="promo-content">
+                            <img class="promo-image" src="/api/placeholder/300/450" alt="サンダーボルツのポスター画像" />
+                            <div class="promo-info">
+                                <div class="promo-title">サンダーボルツ</div>
+                                <div class="promo-subtitle">THUNDERBOLTS</div>
+                                <div class="promo-description">
+                                    マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。
+                                    反英雄たちが集結し、政府の極秘任務に挑む。
+                                </div>
+                                <div class="promo-release">2025年公開予定</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-<%
-            }
-%>
+                <% } %>
+                <% } %>
+            </div>
+            <% } %>
         </div>
-<%
-        }
-%>
-    </div>
-<%
-    }
-%>
-</div>
-<% } else { %>
-<p>検索条件を入力してください</p>
-<% } %>
+        <% } else { %>
+        <p>検索条件を入力してください</p>
+        <% } %>
+    </body>
 <script>
     // 既存のスクリプトをそのまま残す
     const adjustDate = d =>
