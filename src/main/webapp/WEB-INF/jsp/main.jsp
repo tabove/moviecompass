@@ -14,21 +14,15 @@
     <body>
 
         <form id="searchForm" action="Main" method="get">
-            <table border="1">
+            <table>
                 <tr>
                     <td>
                         映画館:
                         <select name="cinema_id">
-                            <option value="">
+                            <option value=""></option>
                                 <c:forEach var="theater" items="${theaterList}">
-                                    <c:if test="${theater.cinema_id == param.cinema_id}">
-                                        ${theater.cinema_name}
-                                    </c:if>
-                                </c:forEach>
-                            </option>
-                            <c:forEach var="theater" items="${theaterList}">
-                                <option value="${theater.cinema_id}">${theater.cinema_name}</option>
-                            </c:forEach>
+                                    <option value="${theater.cinema_id}" ${param.cinema_id == theater.cinema_id ? 'selected' : ''}>${theater.cinema_name}</option>
+                          		  </c:forEach>
                         </select>
                     </td>
                     <td>作品名:
@@ -37,27 +31,32 @@
                     <td>
                         <label for="genre">ジャンル:</label>
                         <select name="genre">
-                            <option value="">${param.genre}</option>
+                            <option value=""></option>
                             <c:forEach var="genre" items="${genreList}">
-                                <option value="${genre}">${genre}</option>
+                                <option value="${genre}" ${param.genre == genre ? 'selected' : ''}>${genre}</option>
                             </c:forEach>
                         </select>
                     </td>
-                    <td>日付
+                    <td>日付:
                         <input type="date" name="date" value="${param.date}">
                     </td>
-                    <td>時間
+                    <td>時間:
                         <input type="time" name="dateTime" value="${param.dateTime}">
                     </td>
                 </tr>
             </table>
             <input type="submit" value="検索">
+            <button type="button" class="reset-btn" onclick="resetForm()">リセット</button>
         </form>
 
         <h2>検索結果</h2>
+        <c:choose>
+        <c:when test="${empty param.cinema_id && empty param.movie_name && empty param.genre && empty param.date && empty param.dateTime}">        	
+        	<p>検索条件を入力してください</p>
+        </c:when>
+        <c:otherwise>
         <%
             List<MovieSchedule> searchResults = (List<MovieSchedule>) request.getAttribute("searchResults");
-
             if (searchResults != null && !searchResults.isEmpty()) {
         %>
         <div class="movie-list-view">
@@ -130,7 +129,7 @@
                             <div class="movie-time"><%= schedule.getMovie_hour() %></div>
                             <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
                             <div class="movie-action">
-                                <form action="Reservation" method="POST">
+                                <form action="ReserveCinema" method="POST">
                                     <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
                                     <input type="hidden" name="cinema_name" value="<%= schedule.getCinema_name() %>">
                                     <input type="hidden" name="movie_id" value="<%= schedule.getMovie_id() %>">
@@ -149,46 +148,61 @@
 				    // 広告データの配列を作成
 				    List<Map<String, String>> promoAds = new ArrayList<>();
 				    
+				    
 				    Map<String, String> ad1 = new HashMap<>();
-				    ad1.put("id", "thunderbolts");
-				    ad1.put("title", "サンダーボルツ");
-				    ad1.put("subtitle", "THUNDERBOLTS");
-				    ad1.put("description", "マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。反英雄たちが集結し、政府の極秘任務に挑む。");
-				    ad1.put("release", "2025年公開予定");
-				    ad1.put("image", "/api/placeholder/300/450");
+				    ad1.put("pr","オーナーKイチオシ！");
+				    ad1.put("id", "conan");
+				    ad1.put("title", "名探偵コナン・隻眼の残像");
+				    ad1.put("subtitle", "DETECTIVE CONAN");
+				    ad1.put("description", "大人気アニメ「名探偵コナン」劇場版第28作！！氷雪吹き荒れる山岳で、白き闇の因縁(ホワイトアウトミステリー)の幕が切って落とされる。");
+				    ad1.put("release", "大ヒット上映中！！");
+				    ad1.put("image", "images/ads/conan.jpg");
 				    promoAds.add(ad1);
 				    
 				    Map<String, String> ad2 = new HashMap<>();
-				    ad2.put("id", "underwater-odyssey");
-				    ad2.put("title", "アンダーウォーター・オデッセイ");
-				    ad2.put("subtitle", "UNDERWATER ODYSSEY");
-				    ad2.put("description", "深海の謎に迫る冒険映画。未知の海底世界で繰り広げられる壮大な物語。");
-				    ad2.put("release", "2025年7月公開");
-				    ad2.put("image", "/api/placeholder/300/450");
+				    ad2.put("pr", "ビッグボスDのこれを見ろ！！");
+				    ad2.put("title", "劇場版TOKYO MER 走る緊急救命室　南海ミッション");
+				    ad2.put("subtitle", "TOKYO MER");
+				    ad2.put("description", "大ヒットドラマ「TOKYO MER」の劇場版第二弾。火山の大噴火で島に取り残された島民79名の救助に挑む");
+				    ad2.put("release", "2025年8月公開");
+				    ad2.put("image", "images/ads/tokyo_mer.jpg");
 				    promoAds.add(ad2);
 				    
+				    
 				    Map<String, String> ad3 = new HashMap<>();
-				    ad3.put("id", "cybernetic");
-				    ad3.put("title", "サイバネティック");
-				    ad3.put("subtitle", "CYBERNETIC");
-				    ad3.put("description", "近未来を舞台にしたSFアクション。人間と機械の境界が曖昧になった世界での戦い。");
-				    ad3.put("release", "2025年秋公開");
-				    ad3.put("image", "/api/placeholder/300/450");
+				    ad3.put("pr","プログラマ―N 待望の最新作");
+				    ad3.put("id", "kimetsu");
+				    ad3.put("title", "鬼滅の刃・無限城編 第一章");
+				    ad3.put("subtitle", "KIMETSU NO YAIBA");
+				    ad3.put("description", "週間少年ジャンプでメガヒットした「鬼滅の刃」。最終章となる無限城編、第一章が公開予定。");
+				    ad3.put("release", "2025年7月公開");
+				    ad3.put("image", "images/ads/kimetsu.jpg");
 				    promoAds.add(ad3);
 				    
 				    Map<String, String> ad4 = new HashMap<>();
-				    ad4.put("id", "escape-sunrise");
-				    ad4.put("title", "エスケープ・サンライズ");
-				    ad4.put("subtitle", "ESCAPE SUNRISE");
-				    ad4.put("description", "孤島に取り残された主人公たちが脱出を試みるサスペンス。予測不能な展開が待ち受ける。");
-				    ad4.put("release", "2025年9月公開");
-				    ad4.put("image", "/api/placeholder/300/450");
+				    ad4.put("pr", "fanboy Hおすすめ!!");
+				    ad4.put("id", "thunderbolts");
+				    ad4.put("title", "サンダーボルツ");
+				    ad4.put("subtitle", "THUNDERBOLTS");
+				    ad4.put("description", "マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。反英雄たちが集結し、政府の極秘任務に挑む。");
+				    ad4.put("release", "2025年公開予定");
+				    ad4.put("image", "images/ads/thunderbolts.jpg");
 				    promoAds.add(ad4);
+				    
+				    Map<String, String> ad5 = new HashMap<>();
+				    ad5.put("pr", "スペシャリストU推薦！!全世界が泣いた感動ドキュメンタリー");
+				    ad5.put("title", "ガラパゴス諸島のアシカたち");
+				    ad5.put("subtitle", "SEA LIONS OF THE GALPAGOS");
+				    ad5.put("description", "ディズニーが手がけるネイチャードキュメンタリー「ディズニーネイチャー」の1作目。ガラパゴス諸島に生息するアシカの生態に迫ったドキュメンタリー。");
+				    ad5.put("release", "2025年4月公開予定");
+				    ad5.put("image", "images/ads/asica.jpg");
+				    promoAds.add(ad5);
+
 				    
 				    request.setAttribute("promoAds", promoAds);
 				%>
 			<div class="promo-area" data-section-id="<%= firstSchedule.getMovie_id() %>">
-    <%-- 広告エリアの内容はJavaScriptで動的に挿入 --%>
+    		<%-- 広告エリアの内容はJavaScriptで動的に挿入 --%>
 			</div>
             </div>
             <% } %>
@@ -196,15 +210,32 @@
         </div>
         <% } %>
     </div>
-    <% } else { %>
-    <p>検索条件を入力してください</p>
+    <% } else{ %>
+    <p>表示出来る結果がありませんでした。</p>
     <% } %>
+	</c:otherwise>
+</c:choose>
+    
 <script src="js/movie-ads.js"></script>
-<script>
-// JSから広告データを設定
+<script >
+
+function resetForm() {
+    // セレクトボックスの値をリセット
+    document.querySelectorAll('#searchForm select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+    
+    // テキスト入力、日付、時間入力をリセット
+    document.querySelectorAll('#searchForm input[type="text"], #searchForm input[type="date"], #searchForm input[type="time"]').forEach(input => {
+        input.value = '';
+    });
+}
+
+//JSから広告データを設定
 window.movieApp.setPromoAds([
     <c:forEach var="ad" items="${promoAds}" varStatus="status">
     {
+        pr: "${ad.pr}",
         id: "${ad.id}",
         title: "${ad.title}",
         subtitle: "${ad.subtitle}",
@@ -215,7 +246,7 @@ window.movieApp.setPromoAds([
     </c:forEach>
 ]);
 
-// ログイン状態をJSに渡す
+//ログイン状態をJSに渡す
 window.movieApp.setupReservation(<%= session.getAttribute("user_id") != null %>);
 </script>
 </body>

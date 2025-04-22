@@ -211,6 +211,7 @@ const promoManager = {
                 <div class="promo-content">
                     <img class="promo-image" src="${nextAd.image}" alt="${nextAd.title}のポスター画像" />
                     <div class="promo-info">
+	                    <div class="promo-sale">${nextAd.pr}</div>
                         <div class="promo-title">${nextAd.title}</div>
                         <div class="promo-subtitle">${nextAd.subtitle}</div>
                         <div class="promo-description">${nextAd.description}</div>

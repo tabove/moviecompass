@@ -45,8 +45,7 @@ public class MovieScheduleDAO {
             "ms.movie_time AS movie_time, ms.ticket_price AS ticket_price, m.movie_genre AS genre " +
             "FROM movieschedule ms " +
             "JOIN cinema c ON ms.cinema_id = c.cinema_id " +
-            "JOIN movie m ON ms.movie_id = m.movie_id " +
-            "WHERE 1=1 " 
+            "JOIN movie m ON ms.movie_id = m.movie_id "
         );
         
         List<String> conditions = new ArrayList<>();
@@ -54,6 +53,7 @@ public class MovieScheduleDAO {
         
         //選択された映画感IDを使用した検索条件
         if (cinema_id != null && !cinema_id.isEmpty()) {
+        	System.out.println(cinema_id);
             conditions.add("c.cinema_id = ?");
             try {
                 params.add(Integer.parseInt(cinema_id));
@@ -103,7 +103,9 @@ public class MovieScheduleDAO {
         
         // conditionの中身チェックからのSQL文に追加
         if (!conditions.isEmpty()) {
-            sql.append(" AND " + String.join(" AND ", conditions));
+            sql.append( "WHERE movie_time >= CURRENT_TIMESTAMP" + " AND " + String.join(" AND ", conditions));
+        } else {
+        	sql.append( "WHERE 1=0 ");
         }
         
         sql.append(" ORDER BY c.cinema_name, m.movie_name, ms.movie_time ASC ");

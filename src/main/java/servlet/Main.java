@@ -27,7 +27,7 @@ public class Main extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		
+				
 		MovieScheduleSearchLogic mssl = new MovieScheduleSearchLogic();
 		GenreSearch gs = new GenreSearch();
 		MovieScheduleDAO dao = new MovieScheduleDAO();
@@ -54,9 +54,8 @@ public class Main extends HttpServlet {
 	    List<TheaterSearch> theaterList = dao.theaterList();
 	    List<String> genreList = gs.getGenreList();
 	    
-	    
 		// Nullチェック（リファクタリング）
-		cinema_name = (cinema_name != null) ? cinema_name : "";
+		cinema_id = (cinema_id != null) ? cinema_id : "";
 		movie_name = (movie_name != null) ? movie_name : "";
 		genre = (genre != null) ? genre : "" ;
 		
