@@ -9,6 +9,7 @@
         <meta charset="UTF-8">
         <title>MovieCompass</title>
         <link rel="stylesheet" href="css/style2.css">
+        <link rel="stylesheet" href="css/movie-ads.css">
     </head>
     <body>
 
@@ -144,219 +145,78 @@
                         </div>
                         <% } %>
                     </div>
-                    <div class="promo-area">
-                        <div class="promo-content">
-                            <img class="promo-image" src="/api/placeholder/300/450" alt="サンダーボルツのポスター画像" />
-                            <div class="promo-info">
-                                <div class="promo-title">サンダーボルツ</div>
-                                <div class="promo-subtitle">THUNDERBOLTS</div>
-                                <div class="promo-description">
-                                    マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。
-                                    反英雄たちが集結し、政府の極秘任務に挑む。
-                                </div>
-                                <div class="promo-release">2025年公開予定</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-                <% } %>
+                    <%
+				    // 広告データの配列を作成
+				    List<Map<String, String>> promoAds = new ArrayList<>();
+				    
+				    Map<String, String> ad1 = new HashMap<>();
+				    ad1.put("id", "thunderbolts");
+				    ad1.put("title", "サンダーボルツ");
+				    ad1.put("subtitle", "THUNDERBOLTS");
+				    ad1.put("description", "マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。反英雄たちが集結し、政府の極秘任務に挑む。");
+				    ad1.put("release", "2025年公開予定");
+				    ad1.put("image", "/api/placeholder/300/450");
+				    promoAds.add(ad1);
+				    
+				    Map<String, String> ad2 = new HashMap<>();
+				    ad2.put("id", "underwater-odyssey");
+				    ad2.put("title", "アンダーウォーター・オデッセイ");
+				    ad2.put("subtitle", "UNDERWATER ODYSSEY");
+				    ad2.put("description", "深海の謎に迫る冒険映画。未知の海底世界で繰り広げられる壮大な物語。");
+				    ad2.put("release", "2025年7月公開");
+				    ad2.put("image", "/api/placeholder/300/450");
+				    promoAds.add(ad2);
+				    
+				    Map<String, String> ad3 = new HashMap<>();
+				    ad3.put("id", "cybernetic");
+				    ad3.put("title", "サイバネティック");
+				    ad3.put("subtitle", "CYBERNETIC");
+				    ad3.put("description", "近未来を舞台にしたSFアクション。人間と機械の境界が曖昧になった世界での戦い。");
+				    ad3.put("release", "2025年秋公開");
+				    ad3.put("image", "/api/placeholder/300/450");
+				    promoAds.add(ad3);
+				    
+				    Map<String, String> ad4 = new HashMap<>();
+				    ad4.put("id", "escape-sunrise");
+				    ad4.put("title", "エスケープ・サンライズ");
+				    ad4.put("subtitle", "ESCAPE SUNRISE");
+				    ad4.put("description", "孤島に取り残された主人公たちが脱出を試みるサスペンス。予測不能な展開が待ち受ける。");
+				    ad4.put("release", "2025年9月公開");
+				    ad4.put("image", "/api/placeholder/300/450");
+				    promoAds.add(ad4);
+				    
+				    request.setAttribute("promoAds", promoAds);
+				%>
+			<div class="promo-area" data-section-id="<%= firstSchedule.getMovie_id() %>">
+    <%-- 広告エリアの内容はJavaScriptで動的に挿入 --%>
+			</div>
             </div>
             <% } %>
+            <% } %>
         </div>
-        <% } else { %>
-        <p>検索条件を入力してください</p>
         <% } %>
-    </body>
+    </div>
+    <% } else { %>
+    <p>検索条件を入力してください</p>
+    <% } %>
+<script src="js/movie-ads.js"></script>
 <script>
-    // 既存のスクリプトをそのまま残す
-    const adjustDate = d =>
-      new Date(d.setMinutes(d.getMinutes() - d.getTimezoneOffset()));
-    const setDateElement = (e, p, d) =>
-      e[p] = adjustDate(d).toJSON().match(/\d+-\d+-\d+/);
-    
-    const dateElement = document.querySelector('input[name=date]');
+// JSから広告データを設定
+window.movieApp.setPromoAds([
+    <c:forEach var="ad" items="${promoAds}" varStatus="status">
+    {
+        id: "${ad.id}",
+        title: "${ad.title}",
+        subtitle: "${ad.subtitle}",
+        description: "${ad.description}",
+        release: "${ad.release}",
+        image: "${ad.image}"
+    }<c:if test="${!status.last}">,</c:if>
+    </c:forEach>
+]);
 
-    const d = new Date();
-                
-    // minを当日に設定
-    d.setTime(Date.now());
-    d.setDate(d.getDate());
-    setDateElement(dateElement, 'min', d);
-    
-    // maxを一か月後(30日)に設定
-    d.setTime(Date.now());
-    d.setDate(d.getDate() + 30);
-    setDateElement(dateElement, 'max', d);
-    
-    // テーブル表示をカード表示に変換する機能
-    document.addEventListener('DOMContentLoaded', function() {
-        // 既にカード表示がある場合は処理しない
-        if (document.querySelector('.search-results')) {
-            return;
-        }
-        
-        const resultTable = document.querySelector('h2 + table');
-        if (!resultTable) return;
-        
-        // データ構造を作成
-        const movieData = {};
-        let currentDate = '';
-        let currentCinema = '';
-        let currentMovie = '';
-        
-        // テーブルの行を処理
-        const rows = resultTable.querySelectorAll('tbody tr');
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-            const cells = row.querySelectorAll('td, th');
-            
-            if (cells.length === 1) {
-                const content = cells[0].textContent.trim();
-                // 日付行の場合
-                if (cells[0].tagName.toLowerCase() === 'th') {
-                    currentDate = content;
-                    if (!movieData[currentDate]) {
-                        movieData[currentDate] = {};
-                    }
-                } 
-                // 映画館名の場合
-                else if (cells[0].colSpan === 5) {
-                    currentCinema = content;
-                    if (!movieData[currentDate][currentCinema]) {
-                        movieData[currentDate][currentCinema] = {};
-                    }
-                } 
-                // 映画名の場合
-                else {
-                    currentMovie = content;
-                    if (!movieData[currentDate][currentCinema][currentMovie]) {
-                        movieData[currentDate][currentCinema][currentMovie] = {
-                            times: [],
-                            prices: {},
-                            forms: {}
-                        };
-                    }
-                }
-            } 
-            // 上映時間、料金、予約ボタンの行
-            else if (cells.length >= 3 && currentMovie && currentCinema && currentDate) {
-                const time = cells[0].textContent.trim();
-                const price = cells[1].textContent.trim();
-                const form = cells[2].querySelector('form');
-                
-                movieData[currentDate][currentCinema][currentMovie].times.push(time);
-                movieData[currentDate][currentCinema][currentMovie].prices[time] = price;
-                if (form) {
-                    movieData[currentDate][currentCinema][currentMovie].forms[time] = form.cloneNode(true);
-                }
-            }
-        }
-        
-        // カード表示を作成
-        const searchResults = document.createElement('div');
-        searchResults.className = 'search-results';
-        
-        for (const date in movieData) {
-            const dateSection = document.createElement('div');
-            dateSection.className = 'date-section';
-            
-            const dateHeading = document.createElement('h3');
-            dateHeading.className = 'date-heading';
-            dateHeading.textContent = date;
-            dateSection.appendChild(dateHeading);
-            
-            for (const cinema in movieData[date]) {
-                const cinemaSection = document.createElement('div');
-                cinemaSection.className = 'cinema-section';
-                
-                const cinemaName = document.createElement('h4');
-                cinemaName.className = 'cinema-name';
-                cinemaName.textContent = cinema;
-                cinemaSection.appendChild(cinemaName);
-                
-                const movieCards = document.createElement('div');
-                movieCards.className = 'movie-cards';
-                
-                for (const movie in movieData[date][cinema]) {
-                    const movieCard = document.createElement('div');
-                    movieCard.className = 'movie-card';
-                    
-                    const movieTitle = document.createElement('div');
-                    movieTitle.className = 'movie-title';
-                    movieTitle.textContent = movie;
-                    movieCard.appendChild(movieTitle);
-                    
-                    const movieDetails = document.createElement('div');
-                    movieDetails.className = 'movie-details';
-                    
-                    const timeSlots = document.createElement('div');
-                    timeSlots.className = 'time-slots';
-                    
-                    // 時間スロットを追加
-                    for (const time of movieData[date][cinema][movie].times) {
-                        const timeSlot = document.createElement('div');
-                        timeSlot.className = 'time-slot';
-                        timeSlot.textContent = time;
-                        timeSlots.appendChild(timeSlot);
-                    }
-                    
-                    movieDetails.appendChild(timeSlots);
-                    
-                    // 料金情報
-                    const priceInfo = document.createElement('div');
-                    priceInfo.className = 'price-info';
-                    // 最初の時間の料金を使用
-                    const firstTime = movieData[date][cinema][movie].times[0];
-                    priceInfo.textContent = movieData[date][cinema][movie].prices[firstTime];
-                    movieDetails.appendChild(priceInfo);
-                    
-                    // 予約フォーム
-                    if (movieData[date][cinema][movie].forms[firstTime]) {
-                        const form = movieData[date][cinema][movie].forms[firstTime];
-                        const button = form.querySelector('button');
-                        if (button) {
-                            button.className = 'reservation-btn';
-                            button.textContent = '予約する';
-                        }
-                        movieDetails.appendChild(form);
-                    }
-                    
-                    movieCard.appendChild(movieDetails);
-                    movieCards.appendChild(movieCard);
-                }
-                
-                cinemaSection.appendChild(movieCards);
-                dateSection.appendChild(cinemaSection);
-            }
-            
-            searchResults.appendChild(dateSection);
-        }
-        
-        // テーブルをカード表示に置き換え
-        resultTable.parentNode.replaceChild(searchResults, resultTable);
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-    	  // 予約ボタンにイベントリスナーを追加
-    	  const reservationButtons = document.querySelectorAll('.reservation-btn');
-    	  
-    	  reservationButtons.forEach(button => {
-    	    button.addEventListener('click', function(event) {
-    	      // セッションから取得したログイン状態を使用（header.jspにある変数を利用）
-    	      var isLoggedIn = <%= session.getAttribute("user_id") != null %>;
-    	      
-    	      if (!isLoggedIn) {
-    	        event.preventDefault(); // フォーム送信をキャンセル
-    	        
-    	        // ログインページにリダイレクト（現在のURLをパラメータとして渡す）
-    	        const currentUrl = encodeURIComponent(window.location.href);
-    	        window.location.href = 'Login?redirect=' + currentUrl;
-    	      }
-    	      // ログイン済みの場合は、フォームがそのまま送信される
-    	    });
-    	  });
-    	});
+// ログイン状態をJSに渡す
+window.movieApp.setupReservation(<%= session.getAttribute("user_id") != null %>);
 </script>
-	</body>
+</body>
 </html>

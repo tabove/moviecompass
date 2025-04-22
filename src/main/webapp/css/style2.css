@@ -122,57 +122,6 @@
   background: linear-gradient(135deg, #43a047, #2e7d32);
 }
 
-/* 右側のプロモーションエリア */
-.promo-area {
-  width: 25%;
-  padding-left: 20px;
-  position: sticky;
-  top: 100px;
-}
-
-.promo-content {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.promo-image {
-  width: 100%;
-  display: block;
-}
-
-.promo-info {
-  background-color: #222;
-  color: #fff;
-  padding: 15px;
-}
-
-.promo-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: #fff;
-}
-
-.promo-subtitle {
-  font-size: 0.9rem;
-  color: #ddd;
-  margin-bottom: 12px;
-}
-
-.promo-description {
-  font-size: 0.85rem;
-  color: #bbb;
-  margin-bottom: 15px;
-  line-height: 1.4;
-}
-
-.promo-release {
-  font-size: 0.85rem;
-  color: #ff416c;
-  font-weight: 500;
-}
-
 /* レスポンシブ対応 */
 @media (max-width: 992px) {
   .cinema-section {

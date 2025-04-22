@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -89,12 +87,18 @@ public class MovieScheduleDAO {
             params.add(date);
         }
 
-        // 時間の条件
+        // 時間の条件 - 修正版
         if (dateTime != null && !dateTime.isEmpty()) {
-        	LocalDate today = LocalDate.now();
-            String fullDateTime = today + " " + dateTime + ":00"; // フルタイムスタンプ形式を生成
-            params.add(Timestamp.valueOf(fullDateTime));
-
+            // 当日の指定時間以降の映画を検索する場合
+            if (date != null && !date.isEmpty()) {
+                // 日付と時間の両方が指定されている場合、その日の指定時間以降
+                conditions.add("ms.movie_time >= ?::timestamp");
+                params.add(date + " " + dateTime + ":00");
+            } else {
+                // 日付指定がない場合、すべての日付で指定時間以降
+                conditions.add("CAST(ms.movie_time AS time) >= ?::time");
+                params.add(dateTime + ":00");
+            }
         }
         
         // conditionの中身チェックからのSQL文に追加
@@ -104,10 +108,9 @@ public class MovieScheduleDAO {
         
         sql.append(" ORDER BY c.cinema_name, m.movie_name, ms.movie_time ASC ");
         
-//        //デバッグ出力
-//		System.out.println("実行するSQL: " + sql);
-//		System.out.println("バインドパラメータ: " + params);
-//		System.out.println("バインドパラメータ: " + movie_id);
+        //デバッグ出力
+		System.out.println("実行するSQL: " + sql);
+		System.out.println("バインドパラメータ: " + params);
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql.toString())) {
@@ -117,8 +120,6 @@ public class MovieScheduleDAO {
                 st.setObject(i + 1, params.get(i));
             }
         	
-        	 // デバッグコード
-            //System.out.println("バインドパラメータ: " + "%" + movie_name + "%");
             ResultSet rs = st.executeQuery();
             
             //結果の差し替え
