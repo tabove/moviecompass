@@ -31,6 +31,7 @@
 <!-- ヘッダー用CSS -->
 <link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/common.css">
 
 <!-- ログイン状態を判定するスクリプト -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

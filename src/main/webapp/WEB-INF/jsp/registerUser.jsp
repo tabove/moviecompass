@@ -15,21 +15,48 @@ if (message == null) {
 <title>ユーザ登録の画面</title>
 </head>
 <body>
-<h1>アカウント作成</h1><br>
-<%= message %>
-<form action="RegisterUser" method="post">
-<p style="text-align: center;">
-メールアドレス：<input type="text" name="mail"><br><br>
-ユ ー ザ    名  ：<input type="text" name="name"><br><br>
-パ ス ワ ー ド ：<input type="password" name="pass"><br>
-</p>
-<p style="text-align: right;">
-<input type="submit" value=" 登     録 "></p>
-</form>
-<form action="Login" method="get">
-<p style="text-align: right;">
-<input type="submit" value="ログイン"><br><br>
-<a href="Main">映画館・上映作品を探す</a></p><br><br>
-</form>
+<div class="container">
+    <h1 class="page-title">アカウント作成</h1>
+    
+    <div class="form-container">
+        <% if (!message.isEmpty()) { %>
+            <div class="error-message"><%= message %></div>
+        <% } %>
+        
+        <form action="RegisterUser" method="post">
+            <div class="form-group">
+                <label for="mail">メールアドレス</label>
+                <input type="email" id="mail" class="form-control" name="mail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">ユーザー名</label>
+                <input type="text" id="name" class="form-control" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="pass">パスワード</label>
+                <input type="password" id="pass" class="form-control" name="pass" required>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn">登録</button>
+            </div>
+        </form>
+        
+        <hr style="margin: 30px 0;">
+        
+        <div style="text-align: center;">
+            <p>すでにアカウントをお持ちの方は</p>
+            <form action="Login" method="get">
+                <button type="submit" class="btn">ログイン</button>
+            </form>
+            
+            <p style="margin-top: 20px;">
+                <a href="Main" class="action-link">映画館・上映作品を探す</a>
+            </p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
