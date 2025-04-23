@@ -73,12 +73,12 @@
 }
 
 .mypage-btn {
-  background-color: #ff9800;
+  background-color: rgb(0, 128, 255);
   color: white;
 }
 
 .logout-btn {
-  background-color: #f44336;
+  background-color: rgb(9, 9, 9);
   color: white;
 }
 

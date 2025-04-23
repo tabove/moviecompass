@@ -38,14 +38,14 @@
 <script>
 $(document).ready(function() {
   // セッションからログイン情報を取得
-   var isLoggedIn = ${not empty loginUser};
-   var username = ${loginUser.name};
-    
+  var isLoggedIn = ${not empty loginUser};
+  
   // ログイン状態に応じてメニューを切り替え
   if (isLoggedIn) {
     $("#guest-menu").hide();
     $("#user-menu").show();
-    $("#username-display").text(username);
+    // loginUserが存在する場合のみnameプロパティにアクセス
+    $("#username-display").text("${not empty loginUser ? loginUser.name : ''}");
   } else {
     $("#guest-menu").show();
     $("#user-menu").hide();

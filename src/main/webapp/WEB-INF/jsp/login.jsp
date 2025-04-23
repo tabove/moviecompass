@@ -21,7 +21,7 @@ User user = (User)session.getAttribute("userR");
         <form action="Login" method="post">
             <div class="form-group">
                 <label for="mail">ログインID（メールアドレス）</label>
-                <input type="text" id="mail" class="form-control" placeholder="メールアドレス" name="mail">
+                <input type="email" id="mail" class="form-control" placeholder="メールアドレス" name="mail">
             </div>
             
             <div class="form-group">

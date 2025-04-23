@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page import="model.data.SearchCondition, model.data.MovieSchedule" %>
+<%@ page import="model.data.MovieSchedule" %>
 <%@ page import="java.util.List,java.util.Map, java.util.Set, java.util.HashMap, java.util.HashSet, java.util.ArrayList" %>
 <%@ include file="header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -57,7 +57,7 @@
 		</form>
         <h2>検索結果</h2>
         <c:choose>
-        <c:when test="${empty param.cinema_id && empty param.movie_name && empty param.genre && empty param.date && empty param.dateTime}">        	
+        <c:when test="${empty param.cinema_id && empty param.movie_id && empty param.movie_name && empty param.genre && empty param.date && empty param.dateTime}">        	
         	<p>検索したい項目を入力してください</p>
         </c:when>
         <c:otherwise>
@@ -132,8 +132,14 @@
 
                         <% for (MovieSchedule schedule : schedulesForMovie) { %>
                         <div class="movie-row">
-                            <div class="movie-time"><%= schedule.getMovie_hour() %></div>
-                            <div class="movie-price"><%= schedule.getTicket_price() %>円</div>
+                        	<% // 上映時間の秒を削る
+	                        String[] str = schedule.getMovie_hour().split("[-/ :]");
+	                        String air_time = String.format("%2s時%2s分", str[0], str[1]);
+	                        // 金額にコンマ足す
+	                        String price = String.format("%,d円", schedule.getTicket_price());
+	                        %>
+                            <div class="movie-time"><%= air_time %></div>
+                            <div class="movie-price"><%= price %></div>
                             <div class="movie-action">
                                 <form action="ReserveCinema" method="POST">
                                     <input type="hidden" name="cinema_id" value="<%= schedule.getCinema_id() %>">
@@ -200,10 +206,10 @@
 				    promoAds.add(ad4);
 				    
 				    Map<String, String> ad5 = new HashMap<>();
-				    ad5.put("pr", "スペシャリストU推薦！!普及の名作をもう一度");
-				    ad5.put("title", " 英国ロイヤル・バレエ＆オペラ in シネマ 2024/25 ロイヤル・バレエ「ロミオとジュリエット」");
+				    ad5.put("pr", "スペシャリストU推薦！!普及の名作が蘇る");
+				    ad5.put("title", " 英国ロイヤル・バレエ＆オペラ in シネマ 「ロミオとジュリエット」");
 				    ad5.put("subtitle", "ROMEO AND JULLET");
-				    ad5.put("description", "今、なお色褪せることのない名作を世界最高峰クラスのバレエとオペラで表現。映画館の大スクリーンと迫力ある音響で観劇とは違う臨場感を味わうことができます。");
+				    ad5.put("description", "色褪せることの無い名作を世界最高峰クラスのバレエとオペラで表現。映画館の大スクリーンと迫力ある音響で観劇とは違う臨場感を味わうことができます。");
 				    ad5.put("release", "2025年6月公開予定");
 				    ad5.put("image", "images/ads/romiojullet.jpg");
 				    ad5.put("link", "https://tohotowa.co.jp/roh/");
