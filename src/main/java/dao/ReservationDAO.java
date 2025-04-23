@@ -3,14 +3,11 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import model.data.Reservation;
-import model.data.SearchCondition;
 
 public class ReservationDAO {
 	//データベース接続に使用する情報
@@ -27,50 +24,40 @@ public class ReservationDAO {
 		}
 	}
 	
-	public List<Reservation> f1() throws Exception{
-		List<Reservation> reserveList = new ArrayList<>();
-		int ticketPrice = 0;
-		
-		// 上映時刻の取り出しと変換
-		SearchCondition SC = new SearchCondition();
-		String time = String.valueOf(SC.getMovieTime());
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		java.util.Date d = sf.parse(time);
-		Timestamp t = new Timestamp(d.getTime());
-		
-		// SQL文の準備（INSERT文）
-		String sql = "INSERT INTO Reservation (reservation_id, user_id, cinema_id, movie_id, movie_time, ticket_price, torokubi)"
-				+ "VALUES ()";
+	public boolean create(Reservation reservation) {
+		// SQL文の準備
+		String sql = "INSERT INTO Reservation(user_id,"
+				+ "cinema_id, movie_id, movie_time, ticket_price, torokubi)"
+				+ "VALUES(?, ?, ?, ?, ?, ?);";
 		
 		// PostgreSQLへの接続
 		try(Connection con = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement pSmt = con.prepareStatement(sql);){
-			// SELECT文の実行
-			ResultSet rs = pSmt.executeQuery(); //update
-			// 結果をリストに移し替える
-			while(rs.next()) {
-				String reservationId = rs.getString("reservationId");
-				String userId = rs.getString("userId");
-				String cinemaId = rs.getString("cinemaId");
-				String movieId = rs.getString("movieId");
-				String movieTime = rs.getString("movieTime");
-				ticketPrice = rs.getInt(ticketPrice);
-				String torokubi = rs.getString("torokubi");
-				
-				Reservation reservation = new Reservation(reservationId,
-														userId,
-														cinemaId,
-														movieId,
-														movieTime,
-														ticketPrice,
-														torokubi);
-				reserveList.add(reservation);
+			
+			
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Date d = sf.parse(reservation.getMovie_time());
+			Timestamp t = new Timestamp(d.getTime());
+			
+			// SQL文の?部分の置き換え
+//			pSmt.setString(1, reservation.getReservation_id());
+			pSmt.setInt(1, Integer.parseInt(reservation.getUser_id()));
+			pSmt.setInt(2, Integer.parseInt(reservation.getCinema_id()));
+			pSmt.setInt(3, Integer.parseInt(reservation.getMovie_id()));
+			pSmt.setTimestamp(4, t);
+			pSmt.setInt(5, reservation.getTicket_price());
+			pSmt.setDate(6, new java.sql.Date(new Date().getTime()));
+			
+			// SQL文の実行
+			int result =pSmt.executeUpdate();
+			if(result != 1) { // 追加に失敗した時（追加件数が1件じゃない時）
+				return false;
 			}
-		} catch(Exception e) {
-			System.out.println("DBアクセス時にエラーが発生しました。");
+		}catch(Exception e) {
 			e.printStackTrace();
+			return false;
 		}
-		return reserveList;
+		return true;
 	}
 
 }

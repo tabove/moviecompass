@@ -12,47 +12,53 @@
         <link rel="stylesheet" href="css/movie-ads.css">
     </head>
     <body>
-
-        <form id="searchForm" action="Main" method="get">
-            <table>
-                <tr>
-                    <td>
-                        映画館:
-                        <select name="cinema_id">
-                            <option value=""></option>
-                                <c:forEach var="theater" items="${theaterList}">
-                                    <option value="${theater.cinema_id}" ${param.cinema_id == theater.cinema_id ? 'selected' : ''}>${theater.cinema_name}</option>
-                          		  </c:forEach>
-                        </select>
-                    </td>
-                    <td>作品名:
-                        <input type="text" name="movie_name" placeholder="作品名を入力してください" value="${param.movie_name}">
-                    </td>
-                    <td>
-                        <label for="genre">ジャンル:</label>
-                        <select name="genre">
-                            <option value=""></option>
-                            <c:forEach var="genre" items="${genreList}">
-                                <option value="${genre}" ${param.genre == genre ? 'selected' : ''}>${genre}</option>
-                            </c:forEach>
-                        </select>
-                    </td>
-                    <td>日付:
-                        <input type="date" name="date" value="${param.date}">
-                    </td>
-                    <td>時間:
-                        <input type="time" name="dateTime" value="${param.dateTime}">
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" value="検索">
-            <button type="button" class="reset-btn" onclick="resetForm()">リセット</button>
-        </form>
-
+		<form id="searchForm" action="Main" method="get">
+		    <!-- 作品名検索 -->
+		    <div class="search-movie-name">
+		        <span>作品名:</span>
+		        <input type="text" name="movie_name" placeholder="作品名を入力してください" value="${param.movie_name}">
+		    </div>
+		    
+		    <!-- その他の検索条件 -->
+		    <div class="search-filters">
+		        <div class="filter-item">
+		            <span>映画館:</span>
+		            <select name="cinema_id">
+		                <option value=""></option>
+		                <c:forEach var="theater" items="${theaterList}">
+		                    <option value="${theater.cinema_id}" ${param.cinema_id == theater.cinema_id ? 'selected' : ''}>${theater.cinema_name}</option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		        <div class="filter-item">
+		            <label for="genre">ジャンル:</label>
+		            <select name="genre">
+		                <option value=""></option>
+		                <c:forEach var="genre" items="${genreList}">
+		                    <option value="${genre}" ${param.genre == genre ? 'selected' : ''}>${genre}</option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		        <div class="filter-item">
+		            <span>日付:</span>
+		            <input type="date" name="date" value="${param.date}">
+		        </div>
+		        <div class="filter-item">
+		            <span>時間:</span>
+		            <input type="time" name="dateTime" value="${param.dateTime}">
+		        </div>
+		    </div>
+		    
+		    <!-- ボタン -->
+		    <div class="search-buttons">
+		        <input type="submit" value="検索">
+		        <button type="button" class="reset-btn" onclick="resetForm()">リセット</button>
+		    </div>
+		</form>
         <h2>検索結果</h2>
         <c:choose>
         <c:when test="${empty param.cinema_id && empty param.movie_name && empty param.genre && empty param.date && empty param.dateTime}">        	
-        	<p>検索条件を入力してください</p>
+        	<p>検索したい項目を入力してください</p>
         </c:when>
         <c:otherwise>
         <%
@@ -157,6 +163,7 @@
 				    ad1.put("description", "大人気アニメ「名探偵コナン」劇場版第28作！！氷雪吹き荒れる山岳で、白き闇の因縁(ホワイトアウトミステリー)の幕が切って落とされる。");
 				    ad1.put("release", "大ヒット上映中！！");
 				    ad1.put("image", "images/ads/conan.jpg");
+				    ad1.put("link", "https://www.conan-movie.jp/2025/");
 				    promoAds.add(ad1);
 				    
 				    Map<String, String> ad2 = new HashMap<>();

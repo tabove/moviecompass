@@ -27,18 +27,81 @@
   z-index: 10;
 }
 
-/* リセットボタンのスタイル */
-.reset-btn {
-    margin-left: 10px;
-    padding: 5px 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
+/* 検索フォームの全体スタイル */
+#searchForm {
+    width: 90%;
+    margin: 0 auto 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
 }
 
-.reset-btn:hover {
-    background-color: #e0e0e0;
+/* 作品名検索エリア - 全幅 */
+.search-movie-name {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.search-movie-name input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+/* フィルター部分のレイアウト */
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-item select,
+.filter-item input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+/* 検索・リセットボタンエリア */
+.search-buttons {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.search-buttons input[type="submit"],
+.search-buttons .reset-btn {
+    padding: 8px 25px;
+    margin: 0 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.search-buttons input[type="submit"] {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    border: none;
+}
+
+.search-buttons .reset-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
 }
 
 /* 映画館セクション */

@@ -48,7 +48,7 @@ if (msg == null){
             </div>
             
             <div class="detail-image">
-                <img src="images/cinema/<%= cinema.getId() %>.jpg" width="300" alt="所在地"/>
+                <img src="images/cinema/<%= cinema.getId() %>.jpg" alt="所在地"/>
             </div>
             
             <!-- お気に入りボタン -->

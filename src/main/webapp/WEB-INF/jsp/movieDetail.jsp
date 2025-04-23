@@ -38,7 +38,7 @@ if (msg == null){
         <div class="detail-main">
             <div style="display: flex;">
                 <div class="detail-image">
-                    <img src="images/movie/<%= movie.getId() %>.jpg" width="200" alt="ポスター"/>
+                    <img src="images/movie/<%= movie.getId() %>.jpg"  alt="ポスター"/>
                 </div>
                 <div class="detail-content">
                     <h1 class="detail-title"><%= movie.getName() %></h1>

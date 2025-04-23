@@ -22,12 +22,10 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		
-		
 		RequestDispatcher dispartchar = 
 				request.getRequestDispatcher("WEB-INF/jsp/login.jsp");	
 		dispartchar.forward(request, response);
-		
-		
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
@@ -43,7 +41,7 @@ public class Login extends HttpServlet {
 		if (mail != null && mail.length() != 0 && pass != null && pass.length() != 0) {
 			
 			UserSearchLogic usl = new UserSearchLogic();
-			User userR = usl.search(mail, pass);
+			User userR = usl.search(mail);
 			
 			HttpSession session = request.getSession();
 			

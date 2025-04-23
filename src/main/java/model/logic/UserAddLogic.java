@@ -1,7 +1,6 @@
-package model.logic;
+package model.data;
 
 import dao.UserDAO;
-import model.data.User;
 
 public class UserAddLogic{
 	
@@ -10,7 +9,7 @@ public class UserAddLogic{
 			String pass,
 			String name) {
 		
-		// 追加する商品を表したuserインスタンスを準備
+		// 追加するuserインスタンスを準備
 		User user = new User(
 				mail,
 				pass,

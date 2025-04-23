@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.logic.UserAddLogic;
+import model.logic.UserSearchLogic;
 
 
 @WebServlet("/RegisterUser")
@@ -45,40 +46,45 @@ public class RegisterUser extends HttpServlet {
 
 		String errMessage = "";
 		
-		// 必須項目チェック
-		if (user_mail != null && "" .equals(user_mail)){
+		// 必須項目チェックと文字数チェック
+		if ("".equals(user_mail)){
 			errMessage += "メールアドレスは必須項目です。<br>";
+		} else if (user_mail.length() > 50) {
+			errMessage += "メールアドレスは50文字以下で入力してください。<br>";
 		}
 		
-		if (user_pass != null && "".equals(user_pass)) {
+		if ("".equals(user_pass)) {
 			errMessage += "パスワードは必須項目です。<br>";
+		} else if (user_pass.length() < 8 || user_pass.length() > 20) {
+			errMessage += "パスワードは8文字以上、20文字以下で入力してください。<br>";
 		}
 		
-		if (user_name != null && "" .equals(user_name)) {
+		if ("".equals(user_name)) {
 			errMessage += "ユーザ名は必須項目です。<br>";
-		}
-		
-	
-		// 文字数チェック
-		if (user_mail.length() > 50) {
-			errMessage += "アドレスは50文字以下で入力してください。<br>";
-		}
-		
-		// 文字数チェック
-		if (user_pass.length() > 20) {
-			errMessage += "パスワードは20文字以下で入力してください。<br>";
-		}
-		
-		// 文字数チェック
-		if (user_name.length() > 20) {
+		} else if (user_name.length() > 20) {
 			errMessage += "ユーザ名は20文字以下で入力してください。<br>";
 		}
-//		
+		
+		// 必須項目チェックと文字数チェックで問題がない場合
+		if ("".equals(errMessage)) {
+			// パスワードに使用可能な半角英数字、記号かのチェック
+			if (!user_pass.matches("[\\w\\p{Punct}]*")) {
+				errMessage += "パスワードは半角英数字、記号のみ使用可能です。";
+				
+			} else {
+				// 全ての入力値に問題がない場合に、メールアドレスの重複チェック
+				UserSearchLogic searchLogic = new UserSearchLogic();
+				boolean isFound = searchLogic.search(user_mail);
+				if (isFound) {
+					errMessage += "既に登録されているメールアドレスです。";
+				}
+			}
+		}
 	
 
-		// 入力値チェックに問題がなければ商品追加処理を行う
+		// 入力値チェックに問題がなければユーザ追加処理を行う
 		if ("".equals(errMessage)) {
-			// 商品テーブルへ追加処理を行う
+			// ユーザテーブルへ追加処理を行う
 			UserAddLogic logic = new UserAddLogic();
 			boolean result = logic.add( user_mail, user_pass, user_name);
 			
@@ -88,22 +94,19 @@ public class RegisterUser extends HttpServlet {
 			} else {
 				message = "登録処理時に問題が発生しました";
 			}
+			
 		} else {
 			// 入力値チェックに問題がある場合は、メッセージにエラーメッセージを設定
-			message = errMessage;
+			message = "登録が完了しませんでした。<br>" + errMessage;
 		}
 
 		// 結果messageをリクエストスコープに保存
 		request.setAttribute("message", message);
 
-		// 商品追加画面（自画面）へフォワード
+		// フォワード
 		RequestDispatcher dispatcher =
 				request.getRequestDispatcher("WEB-INF/jsp/registerUser.jsp");
 		dispatcher.forward(request, response);
-	  
-
-	
-	
 	}	
 }
 
