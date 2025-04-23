@@ -1,14 +1,13 @@
-package model.data;
+package model.logic;
 
 import java.util.List;
 
 import dao.MovieScheduleDAO;
 
-public class GenreSearch {
-	
-	private MovieScheduleDAO dao = new MovieScheduleDAO();
+public class GenreSearchLogic {
 	
 	public List<String> getGenreList(){
+		MovieScheduleDAO dao = new MovieScheduleDAO();
 		return dao.genreList();
 	}
 }

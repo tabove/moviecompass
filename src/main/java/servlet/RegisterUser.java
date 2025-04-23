@@ -31,8 +31,6 @@ public class RegisterUser extends HttpServlet {
 	}
 	
 	
-	
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// リクエストパラメタを取得
 		request.setCharacterEncoding("UTF-8");
@@ -74,7 +72,7 @@ public class RegisterUser extends HttpServlet {
 			} else {
 				// 全ての入力値に問題がない場合に、メールアドレスの重複チェック
 				UserSearchLogic searchLogic = new UserSearchLogic();
-				boolean isFound = searchLogic.search(user_mail);
+				boolean isFound = searchLogic.searchByMail(user_mail);
 				if (isFound) {
 					errMessage += "既に登録されているメールアドレスです。";
 				}

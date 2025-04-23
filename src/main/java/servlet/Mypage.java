@@ -13,9 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import model.data.FavoriteCinema;
 import model.data.FavoriteMovie;
+import model.data.Reservation;
 import model.data.User;
 import model.logic.FavoriteCinemaSearchLogic;
 import model.logic.FavoriteMovieSearchLogic;
+import model.logic.ReservationSearchLogic;
 
 @WebServlet("/Mypage")
 public class Mypage extends HttpServlet {
@@ -33,8 +35,8 @@ public class Mypage extends HttpServlet {
 		User user = (User)session.getAttribute("loginUser");
 		
 		if (user == null) { // ログイン状態でない場合
-			// ログイン画面へフォワード
-			forwardPath = "Login";
+			// ログイン画面へリダイレクト
+			response.sendRedirect("Login");
 			
 		} else {
 			// お気に入り登録されている映画館の取得
@@ -45,23 +47,20 @@ public class Mypage extends HttpServlet {
 			FavoriteMovieSearchLogic favoriteMovieSearchLogic = new FavoriteMovieSearchLogic();
 			List<FavoriteMovie> favoriteMovieList = favoriteMovieSearchLogic.searchAll(user.getId());
 			
-			/*
-			 * 予約リストの取得
-			 * 長迫さんのreservationクラスの確認　フィールド
-			 */
+			// 予約中の作品の取得
+			ReservationSearchLogic reservationSearchLogic = new ReservationSearchLogic();
+			List<Reservation> reservationList = reservationSearchLogic.searchAll(user.getId());
 			
 			// リクエストスコープへ保存
 			request.setAttribute("favoriteCinemaList", favoriteCinemaList);
 			request.setAttribute("favoriteMovieList", favoriteMovieList);
+			request.setAttribute("reservationList", reservationList);
 			
 			// マイページ画面へフォワード
-			forwardPath = "WEB-INF/jsp/mypage.jsp";
+			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/mypage.jsp");
+			dispatcher.forward(request, response);
 		}
 		
-		
-		// フォワード処理
-		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
-		dispatcher.forward(request, response);
 	}
 
 }

@@ -33,12 +33,12 @@ public class MovieScheduleDAO {
     public List<MovieSchedule> searchMovie(String cinema_id,String movie_name, String cinema_name, String movie_id, String genre, String date, String dateTime) {
     	List<MovieSchedule> movieList = new ArrayList<>();
         
-    	 // デバッグ出力：受け取ったパラメータの確認
+    	/* // デバッグ出力：受け取ったパラメータの確認
         System.out.println("DAOが受け取ったパラメータ: movie_name=" + movie_name + 
                           ", cinema_id=" + cinema_id + 
                           ", genre=" + genre + 
                           ", date=" + date + 
-                          ", dateTime=" + dateTime);
+                          ", dateTime=" + dateTime); */
     	
         StringBuilder sql = new StringBuilder(
             "SELECT c.cinema_name AS cinema_name, c.cinema_id AS cinema_id, m.movie_name AS movie_name, m.movie_id AS movie_id, " +

@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.MovieScheduleDAO;
-import model.data.GenreSearch;
 import model.data.MovieSchedule;
-import model.data.SearchCondition;
 import model.data.TheaterSearch;
+import model.logic.GenreSearchLogic;
 import model.logic.MovieScheduleSearchLogic;
 
 /**
@@ -29,9 +28,9 @@ public class Main extends HttpServlet {
 		HttpSession session = request.getSession();
 				
 		MovieScheduleSearchLogic mssl = new MovieScheduleSearchLogic();
-		GenreSearch gs = new GenreSearch();
+		GenreSearchLogic gs = new GenreSearchLogic();
 		MovieScheduleDAO dao = new MovieScheduleDAO();
-		SearchCondition searchCondition = new SearchCondition();
+//		SearchCondition searchCondition = new SearchCondition();
 		
 		// パラメータ取得
 		String cinema_id = request.getParameter("cinema_id");

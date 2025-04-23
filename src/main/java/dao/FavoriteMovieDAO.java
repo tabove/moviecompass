@@ -78,7 +78,7 @@ public class FavoriteMovieDAO {
     /*
      * FavoriteMovieテーブルからString user_idとユーザIDが一致するものを全て取り出して、
      * そのレコードのデータをお気に入り作品インスタンスを生成時に格納する。生成した
-     * お気に入り作品インスタンスをリストに追加して返す。
+     * お気に入り作品インスタンスをリストに追加して返す。順番は作品名の昇順。
      * 
      * 引数：	String user_id:
      * 				ユーザIDと一致するかの検索ID
@@ -94,7 +94,8 @@ public class FavoriteMovieDAO {
 		String sql = "SELECT fm.favorite_movie_id, m.movie_id, m.movie_name, fm.torokubi ";
 		sql += "FROM FavoriteMovie fm ";
 		sql += "JOIN Movie m ON fm.movie_id = m.movie_id ";
-		sql += "WHERE user_id = ?;";
+		sql += "WHERE user_id = ? ";
+		sql += "ORDER BY m.movie_name;";
 		
 		// お気に入り作品リストの準備
 		List<FavoriteMovie> favoriteMovieList = null;

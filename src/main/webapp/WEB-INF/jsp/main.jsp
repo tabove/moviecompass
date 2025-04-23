@@ -173,17 +173,19 @@
 				    ad2.put("description", "大ヒットドラマ「TOKYO MER」の劇場版第二弾。火山の大噴火で島に取り残された島民79名の救助に挑む");
 				    ad2.put("release", "2025年8月公開");
 				    ad2.put("image", "images/ads/tokyo_mer.jpg");
+				    ad2.put("link", "https://tokyomer-movie.jp/");
 				    promoAds.add(ad2);
 				    
 				    
 				    Map<String, String> ad3 = new HashMap<>();
-				    ad3.put("pr","プログラマ―N 待望の最新作");
+				    ad3.put("pr","ファンタジスタN 待望の最新作");
 				    ad3.put("id", "kimetsu");
 				    ad3.put("title", "鬼滅の刃・無限城編 第一章");
 				    ad3.put("subtitle", "KIMETSU NO YAIBA");
 				    ad3.put("description", "週間少年ジャンプでメガヒットした「鬼滅の刃」。最終章となる無限城編、第一章が公開予定。");
 				    ad3.put("release", "2025年7月公開");
 				    ad3.put("image", "images/ads/kimetsu.jpg");
+				    ad3.put("link", "https://kimetsu.com/anime/mugenjyohen_movie/");
 				    promoAds.add(ad3);
 				    
 				    Map<String, String> ad4 = new HashMap<>();
@@ -194,15 +196,17 @@
 				    ad4.put("description", "マーベル・シネマティック・ユニバースの新たなチーム「サンダーボルツ」の活躍を描く作品。反英雄たちが集結し、政府の極秘任務に挑む。");
 				    ad4.put("release", "2025年公開予定");
 				    ad4.put("image", "images/ads/thunderbolts.jpg");
+				    ad4.put("link", "https://marvel.disney.co.jp/movie/thunderbolts");
 				    promoAds.add(ad4);
 				    
 				    Map<String, String> ad5 = new HashMap<>();
-				    ad5.put("pr", "スペシャリストU推薦！!全世界が泣いた感動ドキュメンタリー");
-				    ad5.put("title", "ガラパゴス諸島のアシカたち");
-				    ad5.put("subtitle", "SEA LIONS OF THE GALPAGOS");
-				    ad5.put("description", "ディズニーが手がけるネイチャードキュメンタリー「ディズニーネイチャー」の1作目。ガラパゴス諸島に生息するアシカの生態に迫ったドキュメンタリー。");
-				    ad5.put("release", "2025年4月公開予定");
-				    ad5.put("image", "images/ads/asica.jpg");
+				    ad5.put("pr", "スペシャリストU推薦！!普及の名作をもう一度");
+				    ad5.put("title", " 英国ロイヤル・バレエ＆オペラ in シネマ 2024/25 ロイヤル・バレエ「ロミオとジュリエット」");
+				    ad5.put("subtitle", "ROMEO AND JULLET");
+				    ad5.put("description", "今、なお色褪せることのない名作を世界最高峰クラスのバレエとオペラで表現。映画館の大スクリーンと迫力ある音響で観劇とは違う臨場感を味わうことができます。");
+				    ad5.put("release", "2025年6月公開予定");
+				    ad5.put("image", "images/ads/romiojullet.jpg");
+				    ad5.put("link", "https://tohotowa.co.jp/roh/");
 				    promoAds.add(ad5);
 
 				    
@@ -248,13 +252,14 @@ window.movieApp.setPromoAds([
         subtitle: "${ad.subtitle}",
         description: "${ad.description}",
         release: "${ad.release}",
-        image: "${ad.image}"
+        image: "${ad.image}",
+        link: "${ad.link}"
     }<c:if test="${!status.last}">,</c:if>
     </c:forEach>
 ]);
 
 //ログイン状態をJSに渡す
-window.movieApp.setupReservation(<%= session.getAttribute("user_id") != null %>);
+window.movieApp.setupReservation(${not empty loginUser});
 </script>
 </body>
 </html>

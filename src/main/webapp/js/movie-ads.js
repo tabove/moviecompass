@@ -210,13 +210,15 @@ const promoManager = {
             const promoHtml = `
                 <div class="promo-content">
                     <img class="promo-image" src="${nextAd.image}" alt="${nextAd.title}のポスター画像" />
-                    <div class="promo-info">
-	                    <div class="promo-sale">${nextAd.pr}</div>
-                        <div class="promo-title">${nextAd.title}</div>
-                        <div class="promo-subtitle">${nextAd.subtitle}</div>
-                        <div class="promo-description">${nextAd.description}</div>
-                        <div class="promo-release">${nextAd.release}</div>
-                    </div>
+                    <a class="promo-link" href="${nextAd.link}">
+                    	<div class="promo-info">
+		                    <div class="promo-sale">${nextAd.pr}</div>
+	                        <div class="promo-title">${nextAd.title}</div>
+	                        <div class="promo-subtitle">${nextAd.subtitle}</div>
+	                        <div class="promo-description">${nextAd.description}</div>
+	                        <div class="promo-release">${nextAd.release}</div>
+                    	</div>
+                    </a>
                 </div>
             `;
             
@@ -293,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
     promoManager.initializePromoAreas();
     
     // この関数はJSPで定義済のisLoggedIn変数を使用するため、JSPから呼び出す
-    // reservationManager.setupReservationButtons(isLoggedIn);
+    reservationManager.setupReservationButtons(isLoggedIn);
 });
 
 // JSPから呼び出せるようにグローバルに公開

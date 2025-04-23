@@ -27,8 +27,8 @@ public class ReserveCinema extends HttpServlet {
 		String cinema_name =request.getParameter("cinema_name");
 		String movie_name = request.getParameter("movie_name");
 		String movie_time = request.getParameter("movie_time");
-		String movie_date = request.getParameter("movie_date");
-		String movie_hour = request.getParameter("movie_hour");
+//		String movie_date = request.getParameter("movie_date");
+//		String movie_hour = request.getParameter("movie_hour");
 		String ticket_price = request.getParameter("ticket_price");
 //		String torokubi = request.getParameter("torokubi");
 		
@@ -41,7 +41,7 @@ public class ReserveCinema extends HttpServlet {
 		
 		// reservationインスタンスを準備
 		Reservation reservation = new Reservation(user_id, cinema_id, movie_id,
-				cinema_name, movie_name, movie_time, movie_date, movie_hour, repTicket_price);
+				cinema_name, movie_name, movie_time, repTicket_price);
 		request.setAttribute("reservation", reservation);
 		// 予約確認画面へフォワード
 		RequestDispatcher dispatcher =

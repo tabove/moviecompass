@@ -38,9 +38,9 @@
 <script>
 $(document).ready(function() {
   // セッションからログイン情報を取得
-  var isLoggedIn = <%= session.getAttribute("user_id") != null %>;
-  var username = "<%= session.getAttribute("user_name") != null ? session.getAttribute("user_name") : "" %>";
-  
+   var isLoggedIn = ${not empty loginUser};
+   var username = ${loginUser.name};
+    
   // ログイン状態に応じてメニューを切り替え
   if (isLoggedIn) {
     $("#guest-menu").hide();

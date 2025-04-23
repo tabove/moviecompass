@@ -22,9 +22,20 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		
-		RequestDispatcher dispartchar = 
-				request.getRequestDispatcher("WEB-INF/jsp/login.jsp");	
-		dispartchar.forward(request, response);
+		// セッションスコープのログインユーザを取得する
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("loginUser");
+		
+		// ログイン状態でない場合に、ログイン画面へフォワード
+		if (user == null) {
+			RequestDispatcher dispartchar = 
+					request.getRequestDispatcher("WEB-INF/jsp/login.jsp");	
+			dispartchar.forward(request, response);
+		
+		// ログイン状態の場合はマイページへリダイレクト
+		} else {
+			response.sendRedirect("Mypage");
+		}
 
 	}
 
@@ -41,17 +52,15 @@ public class Login extends HttpServlet {
 		if (mail != null && mail.length() != 0 && pass != null && pass.length() != 0) {
 			
 			UserSearchLogic usl = new UserSearchLogic();
-			User userR = usl.search(mail);
+			User userR = usl.search(mail, pass);
 			
 			HttpSession session = request.getSession();
-			
-			session.setAttribute("userR", userR);
-			
+			session.setAttribute("loginUser", userR);
+		
 			//フォワード
 			RequestDispatcher dispartchar = 
 					request.getRequestDispatcher("WEB-INF/jsp/loginResult.jsp");	
 			dispartchar.forward(request, response);
-			
 			
 		} else {
 		
