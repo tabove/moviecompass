@@ -21,7 +21,7 @@
         <span class="user-greeting">
           <span id="username-display"></span>さん
         </span>
-        <a href="MyPage" class="nav-button mypage-btn">マイページ</a>
+        <a href="Mypage" class="nav-button mypage-btn">マイページ</a>
         <a href="Logout" class="nav-button logout-btn">ログアウト</a>
       </div>
     </nav>

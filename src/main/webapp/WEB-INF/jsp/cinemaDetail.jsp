@@ -37,7 +37,12 @@ if (msg == null){
 <div class="container">
     <div class="detail-container">
         <div class="detail-main">
-            <h1 class="detail-title"><%= cinema.getName() %></h1>
+            <h1 class="detail-title"><%= cinema.getName() %>
+            	<!-- お気に入りボタン -->
+            	<form action="CinemaDetail<%= favoriteAction %>" method="post">
+                	<button class="favorite-button"><%= heart %> お気に入り</button>
+            	</form>
+            </h1>
             <% if (msg != null && !msg.equals("<br>")) { %>
                 <div class="error-message"><%= msg %></div>
             <% } %>
@@ -51,10 +56,6 @@ if (msg == null){
                 <img src="images/cinema/<%= cinema.getId() %>.jpg" alt="所在地"/>
             </div>
             
-            <!-- お気に入りボタン -->
-            <form action="CinemaDetail<%= favoriteAction %>" method="post">
-                <button class="favorite-button"><%= heart %> お気に入り</button>
-            </form>
         </div>
         
         <div class="detail-sidebar">

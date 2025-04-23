@@ -21,6 +21,39 @@ List<Reservation> reservationList = (List<Reservation>)request.getAttribute("res
 <head>
 <meta charset="UTF-8">
 <title><%= user.getName() %>さんのマイページ</title>
+<style>
+    /* マイページ専用のレイアウト調整 */
+    .detail-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .detail-main {
+        flex: 7;
+        padding-right: 20px;
+    }
+    
+    .detail-sidebar {
+        flex: 3;
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* スマホ対応 */
+    @media (max-width: 768px) {
+        .detail-container {
+            flex-direction: column;
+        }
+        
+        .detail-main, .detail-sidebar {
+            width: 100%;
+            padding-right: 0;
+            margin-bottom: 20px;
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -29,8 +62,8 @@ List<Reservation> reservationList = (List<Reservation>)request.getAttribute("res
     
     <p>ようこそ、<%= user.getName() %>さん</p>
     
-    <div class="content-section">
-        <div class="main-content">
+    <div class="detail-container">
+        <div class="detail-main">
             <h2>お気に入り映画館</h2>
             <div class="bordered-box">
                 <div class="item-list">
@@ -100,7 +133,7 @@ List<Reservation> reservationList = (List<Reservation>)request.getAttribute("res
                 <!-- <p><a href="#" class="action-link">パスワード変更</a></p> -->
             </div>
         </div>
-    </div>
-</div>
+      </div>
+	</div>
 </body>
 </html>

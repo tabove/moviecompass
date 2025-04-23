@@ -68,7 +68,7 @@ body{
 }
 
 .main-content {
-  flex: 1;
+  flex: 7;
 }
 
 .favorite-button {
@@ -78,13 +78,16 @@ body{
   padding: 5px 15px;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   transition: all 0.3s;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .favorite-button:hover {
   background-color: #ff6b6b;
   color: white;
+  transform: scale(1.05);
 }
 
 .action-link {
@@ -165,6 +168,19 @@ body{
 }
 
 /* 映画・映画館詳細ページ用のスタイル */
+
+.detail-title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.title-favorite-form {
+  margin: 0;
+}
+
 .detail-container {
   display: flex;
   flex-wrap: wrap;
@@ -181,6 +197,11 @@ body{
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.detail-sidebar btn{
+	margin-top: 10px;
+	
 }
 
 .detail-image {
@@ -206,4 +227,38 @@ body{
 .detail-description {
   line-height: 1.6;
   margin-bottom: 20px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+   .detail-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .detail-container {
+    flex-direction: column;
+  }
+  
+  .detail-main {
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+}
+
+/* フォーム要素の調整 */
+select, 
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"] {
+  font-size: 16px; /* フォームの文字サイズ調整 */
+  padding: 8px;
+}
+
+/* ドロップダウンが切れないように */
+select {
+  text-overflow: ellipsis;
 }

@@ -21,7 +21,7 @@
 		    
 		    <!-- その他の検索条件 -->
 		    <div class="search-filters">
-		        <div class="filter-item">
+		        <div class="filter-item cinema-filter">
 		            <span>映画館:</span>
 		            <select name="cinema_id">
 		                <option value=""></option>

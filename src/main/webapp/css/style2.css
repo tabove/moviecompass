@@ -29,7 +29,7 @@
 
 /* 検索フォームの全体スタイル */
 #searchForm {
-    width: 90%;
+    width: 70%;
     margin: 0 auto 30px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -64,6 +64,18 @@
 .filter-item {
     flex: 1;
     min-width: 150px;
+}
+
+.filter-item.cinema-filter {
+	flex: 2; /* 他のfilter-itemより大きく取る */
+	min-width: 250px; /* 最小幅も大きく */
+}
+            
+.filter-item.cinema-filter select {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .filter-item select,
