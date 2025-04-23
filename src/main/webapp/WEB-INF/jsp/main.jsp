@@ -3,6 +3,23 @@
 <%@ page import="java.util.List,java.util.Map, java.util.Set, java.util.HashMap, java.util.HashSet, java.util.ArrayList" %>
 <%@ include file="header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
+// 初回訪問かどうかをチェック
+Boolean hasVisited = (Boolean) session.getAttribute("hasVisited");
+if (hasVisited == null) {
+    // 初回訪問時はフラグをセット
+    session.setAttribute("hasVisited", true);
+    
+    // ランダムに表示する予告編を選択（0か1）
+    int trailerChoice = (int)(Math.random() * 2);
+    request.setAttribute("showTrailer", true);
+    request.setAttribute("trailerChoice", trailerChoice);
+} else {
+    request.setAttribute("showTrailer", false);
+}
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,8 +27,41 @@
         <title>MovieCompass</title>
         <link rel="stylesheet" href="css/style2.css">
         <link rel="stylesheet" href="css/movie-ads.css">
+        <link rel="stylesheet" href="css/trailer-modal.css">
     </head>
     <body>
+    <!-- 予告編モーダル -->
+	<% if ((Boolean)request.getAttribute("showTrailer")) { %>
+    <!-- 予告編モーダルオーバーレイ -->
+      <div id="trailer-modal" class="trailer-modal">
+        <div class="trailer-content">
+            <span class="close-trailer">&times;</span>
+            <div class="trailer-container">
+                <% if ((Integer)request.getAttribute("trailerChoice") == 0) { %>
+                    <iframe width="100%" height="100%" 
+                        src="https://www.youtube.com/embed/wcEDW5YR1hE?si=CIPIHcZW_LdlAloF?autoplay=1" 
+                        title="アベンジャーズ・ドゥームズデイ 予告編" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    <h2 class="trailer-title">アベンジャーズ・ドゥームズデイ</h2>
+                <% } else { %>
+                    <iframe width="100%" height="100%" 
+                        src="https://www.youtube.com/embed/wcEDW5YR1hE?si=CIPIHcZW_LdlAloF?autoplay=1" 
+                        title="サンダーボルツ 予告編" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    <h2 class="trailer-title">サンダーボルツ</h2>
+                <% } %>
+                <p class="trailer-desc">間もなく公開！お楽しみに！</p>
+                <a href="#" class="trailer-link">詳細はこちら</a>
+            </div>
+        </div>
+      </div>
+	<% } %>
 		<form id="searchForm" action="Main" method="get">
 		    <!-- 作品名検索 -->
 		    <div class="search-movie-name">
@@ -263,6 +313,28 @@ window.movieApp.setPromoAds([
     }<c:if test="${!status.last}">,</c:if>
     </c:forEach>
 ]);
+
+//モーダル処理
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('trailer-modal');
+    if (modal) {
+        // モーダルを表示
+        modal.style.display = 'flex';
+        
+        // 閉じるボタンのイベント
+        var closeBtn = document.querySelector('.close-trailer');
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // モーダル外クリックで閉じる
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
 
 //ログイン状態をJSに渡す
 window.movieApp.setupReservation(${not empty loginUser});

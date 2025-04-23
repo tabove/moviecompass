@@ -35,26 +35,28 @@ if (msg == null){
 <body>
 <div class="container">
     <div class="detail-container">
+        <div class="detail-main">
+            <div class="movie-content-wrapper">
                 <div class="detail-image">
-                    <img src="images/movie/<%= movie.getId() %>.jpg"  alt="ポスター"/>
+                    <img src="images/movie/<%= movie.getId() %>.jpg" alt="ポスター"/>
                 </div>
-				<h1 class="detail-title-container">
-					<%= movie.getName() %>
-					<form action="MovieDetail<%= favoriteAction %>" method="post" class="title-favorite-form">
-						<button class="favorite-button"><%= heart %> お気に入り</button>
-					</form>
- 				</h1>
-				<div class="detail-info">
-					<p>上映開始日：<%= movie.getRelease_date() %></p>
-					<p>上映時間：<%= movie.getDuration() %>分</p>
-					<p>ジャンル：<%= movie.getGenre() %></p>
-				</div>
+                <div class="detail-content">
+                    <div class="detail-title-container">
+                        <h1 class="detail-title"><%= movie.getName() %></h1>
+                        <form action="MovieDetail<%= favoriteAction %>" method="post" class="title-favorite-form">
+                            <button class="favorite-button"><%= heart %> お気に入り</button>
+                        </form>
+                    </div>
+                    
+                    <div class="detail-info">
+                        <p>上映開始日：<%= movie.getRelease_date() %></p>
+                        <p>上映時間：<%= movie.getDuration() %>分</p>
+                        <p>ジャンル：<%= movie.getGenre() %></p>
+                    </div>
                     
                     <% if (msg != null && !msg.equals("<br>")) { %>
                         <div class="error-message"><%= msg %></div>
                     <% } %>
-                    
-                    
                 </div>
             </div>
             
@@ -79,6 +81,7 @@ if (msg == null){
             
             <a href="Main" class="action-link">映画館・上映作品を探す</a>
         </div>
-	</div>
+    </div>
+</div>
 </body>
 </html>
