@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="model.data.Reservation" %>
 <%@ include file="header.jsp" %>
-<% String errorMsg = (String)request.getAttribute("errorMsg"); %>
+<% String errorMsg = (String)request.getAttribute("errorMsg"); 
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +11,14 @@
 <title>予約完了画面</title>
 </head>
 <body>
-<% if(errorMsg != null){%>
-<p><%= errorMsg %></p>
-<% } %>
-<a href="WEB-INF/jsp/mypage.jsp">マイページ</a>
-<br>
-<a href="index.jsp">トップへ</a>
+	<div class="container">
+	    <h1 class="page-title">予約結果</h1>
+           <div class="result-message"><%= errorMsg %></div>       
+
+           <div class="action-buttons">
+               <a href="Mypage" class="btn">マイページへ</a>
+               <a href="Main" class="btn">トップへ戻る</a>
+           </div>
+</div>
 </body>
 </html>

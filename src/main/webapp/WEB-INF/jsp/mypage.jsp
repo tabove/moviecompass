@@ -19,39 +19,6 @@ List<Reservation> reservationList = (List<Reservation>)request.getAttribute("res
 <head>
 <meta charset="UTF-8">
 <title><%= user.getName() %>さんのマイページ</title>
-<style>
-    /* マイページ専用のレイアウト調整 */
-    .detail-container {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    
-    .detail-main {
-        flex: 7;
-        padding-right: 20px;
-    }
-    
-    .detail-sidebar {
-        flex: 3;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    /* スマホ対応 */
-    @media (max-width: 768px) {
-        .detail-container {
-            flex-direction: column;
-        }
-        
-        .detail-main, .detail-sidebar {
-            width: 100%;
-            padding-right: 0;
-            margin-bottom: 20px;
-        }
-    }
-</style>
 </head>
 
 <body>
@@ -92,22 +59,23 @@ List<Reservation> reservationList = (List<Reservation>)request.getAttribute("res
             <div class="bordered-box">
                 <% if (reservationList != null && !reservationList.isEmpty()) { %>
                     <% for (Reservation r : reservationList) { %>
-                        <div style="padding: 10px 0; border-bottom: 1px solid #eee;">
-                            映画館: <a href="CinemaDetail?cinema_id=<%= r.getCinema_id() %>"><%= r.getCinema_name() %></a><br>
-                            作品: <a href="MovieDetail?movie_id=<%= r.getMovie_id() %>"><%= r.getMovie_name() %></a><br>
-                            <% // 上映日時の表示を整える
-                            String[] str = r.getMovie_time().split("[-/ :]");
-                            String time = String.format("%s年%2s月%2s日 %2s時%2s分", str[0], str[1], str[2], str[3], str[4]);
-                            %>
-                            上映日時: <%= time %><br>
-                            <% // チケット単価の表示を整える
-                            String price = String.format("%,d円", r.getTicket_price());
-                            %>
-                            価格: <%= price %><br>
-                            <% // 予約日の表示を整える
-                            String reservationDate = r.getTorokubi().replaceFirst("[-/]", "年").replaceFirst("[-/]", "月") + "日";
-                            %>
-                            予約日: <%= reservationDate %>
+                        <div class="reservation-item">
+                            <div class="reservation-image">
+                                <img src="images/movie/<%= r.getMovie_id() %>.jpg" alt="ポスター"/>
+                            </div>
+                            <div class="reservation-content">
+                                映画館: <a href="CinemaDetail?cinema_id=<%= r.getCinema_id() %>"><%= r.getCinema_name() %></a><br>
+                                作品: <a href="MovieDetail?movie_id=<%= r.getMovie_id() %>"><%= r.getMovie_name() %></a><br>
+                                <% // 上映日時の表示を整える
+                                String[] str = r.getMovie_time().split("[-/ :]");
+                                String time = String.format("%s年%2s月%2s日 %2s時%2s分", str[0], str[1], str[2], str[3], str[4]);
+                                %>
+                                上映日時: <%= time %><br>
+                                <% // チケット単価の表示を整える
+                                String price = String.format("%,d円", r.getTicket_price());
+                                %>
+                                価格: <%= price %><br>
+                            </div>
                         </div>
                     <% } %>
                 <% } else { %>

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.data.Movie;
 import model.data.MovieSchedule;
 import model.data.TheaterSearch;
 import model.logic.CinemaSearchLogic;
@@ -49,19 +48,25 @@ public class Main extends HttpServlet {
 //	                      ", dateTime=" + dateTime);
 
 		
-	    // 検索に必要なリスト取得	
-	    List<TheaterSearch> theaterList = cinemaSearch.getTheaterList();
-	    List<String> genreList = movieSearch.getGenreList();
 	    
 		// Nullチェック（リファクタリング）
 		cinema_id = (cinema_id != null) ? cinema_id : "";
 		movie_name = (movie_name != null) ? movie_name : "";
 		genre = (genre != null) ? genre : "" ;
 		
-		// 検索処理
-		List<MovieSchedule> results = mssl.searchMovie(cinema_id,movie_name, cinema_name, movie_id, genre, date, dateTime);
+		// 検索に必要なドロップダウン項目を作成する中身
+		List<TheaterSearch> theaterList = (List<TheaterSearch>)session.getAttribute("theaterList");
+		List<String> genreList = (List<String>)session.getAttribute("genreList");
+		// 検索に必要なリストがセッションスコープにない場合に取得する
+		if (theaterList == null) {
+			theaterList = cinemaSearch.getTheaterList();
+		}
+		if (genreList == null) {
+			genreList = movieSearch.getGenreList();
+		}
 		
-		Movie movie = movieSearch.search(movie_id);
+		// 検索処理
+		List<MovieSchedule> results = mssl.searchMovie(cinema_id, movie_name, cinema_name, movie_id, genre, date, dateTime);
 		
 		// セッションに検索条件保存
 		session.setAttribute("genreList", genreList);
@@ -69,7 +74,6 @@ public class Main extends HttpServlet {
 
 		// 検索結果をリクエストスコープへ保存
 		request.setAttribute("searchResults", results);
-		request.setAttribute("movie", movie);
 		
 		// JSPへフォワード
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");

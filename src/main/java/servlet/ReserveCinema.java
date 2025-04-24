@@ -32,12 +32,13 @@ public class ReserveCinema extends HttpServlet {
 		// セッションスコープに保存されたユーザIDを取得
 		HttpSession session = request.getSession();
 		User user = (User)session.getAttribute("loginUser");
-		String user_id =user.getId();
+		String user_id = user.getId();
 		
 		// reservationインスタンスを準備
 		Reservation reservation = new Reservation(user_id, cinema_id, movie_id,
 				cinema_name, movie_name, movie_time, repTicket_price);
 		request.setAttribute("reservation", reservation);
+		
 		// 予約確認画面へフォワード
 		RequestDispatcher dispatcher =
 				request.getRequestDispatcher("WEB-INF/jsp/reserveCinema.jsp");

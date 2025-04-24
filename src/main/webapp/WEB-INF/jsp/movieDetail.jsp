@@ -69,7 +69,7 @@ if (msg == null){
         <div class="detail-sidebar">
             <h3>この作品について</h3>
             <p>この作品を上映している映画館を検索できます。</p>
-            <a href="Main?movie_id=<%= movie.getId() %>" class="btn">この作品で検索</a>
+            <a href="Main?movie_name=<%= movie.getName() %>" class="btn">この作品で検索</a>
             
             <hr>
             

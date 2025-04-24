@@ -28,46 +28,6 @@ public class ReservationDAO {
 	}
 	
 	/*
-	 * 予約テーブルへ1件予約データを登録する
-	 */
-	public boolean create(String user_id, String cinema_id, String movie_id, 
-						String movie_time, int repTicket_price) {
-		// SQL文の準備
-		String sql = "INSERT INTO Reservation(user_id,"
-				+ "cinema_id, movie_id, movie_time, ticket_price, torokubi)"
-				+ "VALUES(?, ?, ?, ?, ?, ?);";
-		
-		// PostgreSQLへの接続
-		try(Connection con = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement pSmt = con.prepareStatement(sql);){
-			
-			
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-			Date d = sf.parse(movie_time);
-			Timestamp t = new Timestamp(d.getTime());
-			
-			// SQL文の?部分の置き換え
-//			pSmt.setString(1, reservation.getReservation_id());
-			pSmt.setInt(1, Integer.parseInt(user_id));
-			pSmt.setInt(2, Integer.parseInt(cinema_id));
-			pSmt.setInt(3, Integer.parseInt(movie_id));
-			pSmt.setTimestamp(4, t);
-			pSmt.setInt(5, repTicket_price);
-			pSmt.setDate(6, new java.sql.Date(new Date().getTime()));
-			
-			// SQL文の実行
-			int result =pSmt.executeUpdate();
-			if(result != 1) { // 追加に失敗した時（追加件数が1件じゃない時）
-				return false;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
-	/*
      * ReservationテーブルからString user_idとユーザIDが一致するものを全て取り出して、
      * そのレコードのデータを予約インスタンスを生成時に格納する。生成した
      * 予約インスタンスをリストに追加して返す。
@@ -91,8 +51,8 @@ public class ReservationDAO {
 		sql += "FROM Reservation r ";
 		sql += "JOIN Movie m ON r.movie_id = m.movie_id ";
 		sql += "JOIN Cinema c ON r.cinema_id = c.cinema_id ";
-		sql += "WHERE user_id = ? ";
-		sql += "AND movie_time >= CURRENT_TIMESTAMP ";
+		sql += "WHERE r.user_id = ? ";
+		sql += "AND r.movie_time >= CURRENT_TIMESTAMP ";
 		sql += "ORDER BY r.movie_time, c.cinema_name, m.movie_name;";
 
         /* 2) PostgreSQLへの接続 */
@@ -116,7 +76,112 @@ public class ReservationDAO {
  		return reservationList;
 	}
 	
+	/*
+     * ReservationテーブルからString user_id, String cinema_id, String movie_id,
+     * String movie_timeが一致するレコードの物を取り出す。そのレコードのデータを
+     * 予約インスタンスを生成時に格納する。
+     * 
+     * 引数：	String user_id:
+     * 				ユーザIDと一致するかの検索ID
+     * 			String cinema_id:
+     * 				映画館IDと一致するかの検索ID
+     * 			String movie_id:
+     * 				作品IDと一致するかの検索ID
+     * 			String movie_time:
+     * 				上映日時と一致するかの検索ID
+     * 
+     * 戻り値：	Reservation:
+     * 				１レコード分のデータが格納されている予約インスタンス
+     * 			null:
+     * 				検索条件と一致するレコードを見つけられなかった場合
+     */
+	public Reservation selectDuplicate(String user_id, String cinema_id, String movie_id, String movie_time){
+		// 予約インスタンスの準備
+		Reservation reservation = null;
+		
+		/* 1) SQL文の準備 */
+		String sql = "SELECT r.reservation_id, r.user_id, c.cinema_id, c.cinema_name, ";
+		sql += "m.movie_id, m.movie_name, r.movie_time, r.ticket_price, r.torokubi ";
+		sql += "FROM Reservation r ";
+		sql += "JOIN Movie m ON r.movie_id = m.movie_id ";
+		sql += "JOIN Cinema c ON r.cinema_id = c.cinema_id ";
+		sql += "WHERE r.user_id = ? ";
+		sql += "AND c.cinema_id = ? ";
+		sql += "AND m.movie_id = ? ";
+		sql += "AND r.movie_time = ?;";
+
+        /* 2) PostgreSQLへの接続 */
+ 		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+ 			PreparedStatement st = con.prepareStatement(sql);) {
+ 			
+ 			// timestamp型の処理
+ 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Date d = sf.parse(movie_time);
+			Timestamp timestamp = new Timestamp(d.getTime());
+ 			
+ 			/* 3) SQL文の?部分を置き換え */
+ 			st.setInt(1, Integer.parseInt(user_id));
+ 			st.setInt(2, Integer.parseInt(cinema_id));
+ 			st.setInt(3, Integer.parseInt(movie_id));
+ 			st.setTimestamp(4, timestamp);
+
+			/* 4) SQL文の実行 */
+			ResultSet rs = st.executeQuery();
+
+			/* 5) 結果をお気に入り映画館リストに格納する */
+			if (rs.next()) {
+				reservation = makeReservation(rs);
+			}
+
+		} catch (Exception e) {
+			System.out.println("DBアクセス時にエラーが発生しました。");
+			e.printStackTrace();
+		}
+
+ 		return reservation;
+	}
+	
     /*
+		 * 予約テーブルへ1件予約データを登録する
+		 */
+		public boolean create(String user_id, String cinema_id, String movie_id, 
+							String movie_time, int repTicket_price) {
+			// SQL文の準備
+			String sql = "INSERT INTO Reservation(user_id,"
+					+ "cinema_id, movie_id, movie_time, ticket_price, torokubi)"
+					+ "VALUES(?, ?, ?, ?, ?, ?);";
+			
+			// PostgreSQLへの接続
+			try(Connection con = DriverManager.getConnection(URL, USER, PASS);
+					PreparedStatement pSmt = con.prepareStatement(sql);){
+				
+				
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				Date d = sf.parse(movie_time);
+				Timestamp t = new Timestamp(d.getTime());
+				
+				// SQL文の?部分の置き換え
+	//			pSmt.setString(1, reservation.getReservation_id());
+				pSmt.setInt(1, Integer.parseInt(user_id));
+				pSmt.setInt(2, Integer.parseInt(cinema_id));
+				pSmt.setInt(3, Integer.parseInt(movie_id));
+				pSmt.setTimestamp(4, t);
+				pSmt.setInt(5, repTicket_price);
+				pSmt.setDate(6, new java.sql.Date(new Date().getTime()));
+				
+				// SQL文の実行
+				int result =pSmt.executeUpdate();
+				if(result != 1) { // 追加に失敗した時（追加件数が1件じゃない時）
+					return false;
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+
+	/*
      * ResultSet rsのデータを予約インスタンスに格納したのち、
      * Listへ追加する。
      * 
@@ -132,25 +197,40 @@ public class ReservationDAO {
 		List<Reservation> reservationList = new ArrayList<Reservation>();
 		
 		while (rs.next()) {
-			String reservation_id = rs.getString("reservation_id");
-			String user_id = rs.getString("user_id");
-			String cinema_id = rs.getString("cinema_id");
-			String cinema_name = rs.getString("cinema_name");
-			String movie_id = rs.getString("movie_id");
-			String movie_name = rs.getString("movie_name");
-			String movie_time = rs.getString("movie_time");
-			int ticket_price = rs.getInt("ticket_price");
-			String torokubi = rs.getString("torokubi");
-			
 			// Reservationインスタンスの生成
-			Reservation reservation = new Reservation(reservation_id, user_id, cinema_id, movie_id, 
-									cinema_name, movie_name, movie_time, ticket_price, torokubi);
+			Reservation reservation = makeReservation(rs);
     		
 			// リストに追加
     		reservationList.add(reservation);
     	}
 		
 		return reservationList;
+	}
+	
+    /*
+     * ResultSet rsのデータを予約インスタンスに格納する
+     * 
+     * 引数：	ResultSet rs:
+     * 				Reservationテーブルに対して行った検索結果
+     * 
+     * 戻り値：	Reservation:
+     * 				１レコード分のデータが格納されている予約インスタンス
+     */
+	private Reservation makeReservation(ResultSet rs) throws Exception {
+		// ResultSetの内容の読み込み
+		String reservation_id = rs.getString("reservation_id");
+		String user_id = rs.getString("user_id");
+		String cinema_id = rs.getString("cinema_id");
+		String cinema_name = rs.getString("cinema_name");
+		String movie_id = rs.getString("movie_id");
+		String movie_name = rs.getString("movie_name");
+		String movie_time = rs.getString("movie_time");
+		int ticket_price = rs.getInt("ticket_price");
+		String torokubi = rs.getString("torokubi");
+		
+		// Reservationインスタンスの生成
+		return new Reservation(reservation_id, user_id, cinema_id, movie_id, 
+								cinema_name, movie_name, movie_time, ticket_price, torokubi);
 	}
 
 }

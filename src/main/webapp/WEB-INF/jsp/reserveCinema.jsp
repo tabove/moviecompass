@@ -24,7 +24,7 @@
 		
 		<div class="form-container">
 			<h2 style="color: #3498db;">以下の内容で予約します。</h2>
-			<div>
+			<div class="bordered-box">
 				<h3>劇場名</h3>
 				<span><%= reservation.getCinema_name() %></span>
 				<h3>作品名</h3>
@@ -42,15 +42,18 @@
 				<span><%= user.getName() %></span>
 			</div>
 			
-			<a class="btns" href="index.jsp">検索画面に戻る</a>	
-			<form action="ReserveCinemaResult" method="post">
-				<input type="hidden" name="user_id" value=<%= reservation.getUser_id() %>>
-				<input type="hidden" name="cinema_id" value=<%= reservation.getCinema_id() %>>
-				<input type="hidden" name="movie_id" value=<%= reservation.getMovie_id() %>>
-				<input type="hidden" name="movie_time" value="<%= reservation.getMovie_time() %>">
-				<input type="hidden" name="ticket_price" value=<%= reservation.getTicket_price() %>>
-				<button type="submit"  class="btn" >予約確定</button>
-			</form>
+			<div class="button-container">
+				<!-- 検索画面に戻るボタンにパラメータを追加 -->
+				<a class="btns" href="Main?movie_name=<%= reservation.getMovie_name() %>&cinema_id=<%= reservation.getCinema_id() %>">検索画面に戻る</a>	
+				<form action="ReserveCinemaResult" method="post" style="flex: 1; margin: 0;">
+					<input type="hidden" name="user_id" value=<%= reservation.getUser_id() %>>
+					<input type="hidden" name="cinema_id" value=<%= reservation.getCinema_id() %>>
+					<input type="hidden" name="movie_id" value=<%= reservation.getMovie_id() %>>
+					<input type="hidden" name="movie_time" value="<%= reservation.getMovie_time() %>">
+					<input type="hidden" name="ticket_price" value=<%= reservation.getTicket_price() %>>
+					<button type="submit" class="btn" style="width: 100%;">予約確定</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </body>

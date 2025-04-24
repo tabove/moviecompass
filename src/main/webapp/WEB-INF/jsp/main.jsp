@@ -39,7 +39,7 @@ if (hasVisited == null) {
             <div class="trailer-container">
                 <% if ((Integer)request.getAttribute("trailerChoice") == 0) { %>
                     <iframe width="100%" height="100%" 
-                        src="https://www.youtube.com/embed/wcEDW5YR1hE?si=CIPIHcZW_LdlAloF?autoplay=1" 
+                        src="https://www.youtube.com/embed/XLuL_TXbK1g?si=5-N20u98v8Pg8iNy?autoplay=1" 
                         title="アベンジャーズ・ドゥームズデイ 予告編" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
