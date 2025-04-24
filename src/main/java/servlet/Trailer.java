@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class Trailer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// クッキーの有効期限（7日間）
-//    private static final int COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+	// クッキーの有効期限（1日間）
+    private static final int COOKIE_MAX_AGE = 60 * 60 * 24 * 1;
     
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +40,7 @@ public class Trailer extends HttpServlet {
         if (!hasVisited) {
             // 初回訪問の場合、クッキーをセット
             Cookie visitedCookie = new Cookie("hasVisitedSite", "true");
-//            visitedCookie.setMaxAge(COOKIE_MAX_AGE);
+            visitedCookie.setMaxAge(COOKIE_MAX_AGE);
             visitedCookie.setPath("/");
             response.addCookie(visitedCookie);
             

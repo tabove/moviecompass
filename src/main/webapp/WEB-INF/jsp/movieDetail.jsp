@@ -18,7 +18,7 @@ if (favoriteMovie == null){
 	heart = "♡";
 } else {
 	favoriteAction = "?action=delete&movie_id=" + movie.getId();
-	heart = "♥";
+	heart = "💓";
 }
 
 if (msg == null){

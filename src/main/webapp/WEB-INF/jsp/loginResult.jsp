@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
     
-<% User user = (User)session.getAttribute("userR"); %>
+<% User user = (User)session.getAttribute("loginUser"); %>
     
 <!DOCTYPE html>
 <html>

@@ -1,5 +1,7 @@
 package model.logic;
 
+import java.util.List;
+
 import dao.MovieDAO;
 import model.data.Movie;
 
@@ -16,5 +18,14 @@ public class MovieSearchLogic {
 		MovieDAO dao = new MovieDAO();
 		
 		return dao.selectMovieById(movie_id);
+	}
+	
+	/*
+	 * Movieテーブルより全ての作品のジャンルを
+	 * 重複無しでリストで返す
+	 */
+	public List<String> getGenreList(){
+		MovieDAO dao = new MovieDAO();
+		return dao.genreList();
 	}
 }

@@ -20,17 +20,12 @@ public class ReserveCinema extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		// リクエストパラメータの取得
-//		String reservation_id = request.getParameter("reservation_id");
-//		String user_id = request.getParameter("user_id");
 		String cinema_id = request.getParameter("cinema_id");
 		String movie_id = request.getParameter("movie_id");
 		String cinema_name =request.getParameter("cinema_name");
 		String movie_name = request.getParameter("movie_name");
 		String movie_time = request.getParameter("movie_time");
-//		String movie_date = request.getParameter("movie_date");
-//		String movie_hour = request.getParameter("movie_hour");
 		String ticket_price = request.getParameter("ticket_price");
-//		String torokubi = request.getParameter("torokubi");
 		
 		// チケット単価を数値に変換する。
 		int repTicket_price = Integer.parseInt(ticket_price);

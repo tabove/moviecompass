@@ -1,7 +1,10 @@
 package model.logic;
 
+import java.util.List;
+
 import dao.CinemaDAO;
 import model.data.Cinema;
+import model.data.TheaterSearch;
 
 public class CinemaSearchLogic {
 	
@@ -16,6 +19,14 @@ public class CinemaSearchLogic {
 		CinemaDAO dao = new CinemaDAO();
 		
 		return dao.selectCinemaById(cinema_id);
+	}
+	
+	/*
+	 * Cinemaテーブルより全ての映画館のIDと名前をリストで返す
+	 */
+	public List<TheaterSearch> getTheaterList(){
+		CinemaDAO dao = new CinemaDAO();
+		return dao.theaterList();
 	}
 
 }

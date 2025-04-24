@@ -25,8 +25,8 @@ if (message == null) {
         
         <form action="RegisterUser" method="post">
             <div class="form-group">
-                <label for="mail">メールアドレス</label>
-                <input type="email" id="mail" class="form-control" name="mail" required>
+                <label for="mail">ログインID</label>
+                <input type="email" id="mail" class="form-control" name="mail" placeholder="メールアドレス" required>
             </div>
             
             <div class="form-group">

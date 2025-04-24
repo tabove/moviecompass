@@ -7,8 +7,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
     
-<%-- user モデルの確認 --%>
-<%-- 検索画面への検索条件の渡し方 --%>
 <%
 User user = (User)session.getAttribute("loginUser");
 List<FavoriteCinema> favoriteCinemaList = (List<FavoriteCinema>)request.getAttribute("favoriteCinemaList");

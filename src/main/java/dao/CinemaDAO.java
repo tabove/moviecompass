@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.data.Cinema;
+import model.data.TheaterSearch;
 
 public class CinemaDAO {
 	private final String URL = "jdbc:postgresql://localhost:5432/moviecompass";
@@ -65,7 +69,34 @@ public class CinemaDAO {
  		return cinema;
     }
     
-    /*
+    //映画館を抽出するメソッド    
+	public List<TheaterSearch> theaterList(){
+		List<TheaterSearch> theaterList = new ArrayList<>();
+		
+		String sql = "SELECT cinema_id, cinema_name " +
+					 "FROM Cinema ; ";
+		
+		try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+	            PreparedStatement st = con.prepareStatement(sql)) {
+			
+			ResultSet rs = st.executeQuery();
+			
+			while (rs.next()) {
+				String cinema_id = rs.getString("cinema_id");
+				String cinema_name = rs.getString("cinema_name");
+				TheaterSearch cName = new TheaterSearch(cinema_id,cinema_name);
+				
+				// リストに1行分のデータを追加する
+				theaterList.add(cName);
+	        }
+			
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return theaterList;
+	}
+
+	/*
      * ResultSet rsのデータを映画館インスタンスに格納する
      * 
      * 引数：	ResultSet rs:

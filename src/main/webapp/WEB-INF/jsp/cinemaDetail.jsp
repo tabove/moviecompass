@@ -4,8 +4,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
     
-<%-- 検索画面への検索条件の渡し方 
-	 ボタンに画像を使用--%>
 <%
 Cinema cinema = (Cinema)request.getAttribute("cinema");
 FavoriteCinema favoriteCinema = (FavoriteCinema)request.getAttribute("favoriteCinema");
@@ -19,7 +17,7 @@ if (favoriteCinema == null){
 	heart = "♡";
 } else {
 	favoriteAction = "?action=delete&cinema_id=" + cinema.getId();
-	heart = "♥";
+	heart = "💓";
 }
 
 if (msg == null){

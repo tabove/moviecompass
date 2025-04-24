@@ -4,14 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import model.data.MovieSchedule;
-import model.data.TheaterSearch;
 
 public class MovieScheduleDAO {
 	
@@ -33,12 +29,13 @@ public class MovieScheduleDAO {
     public List<MovieSchedule> searchMovie(String cinema_id,String movie_name, String cinema_name, String movie_id, String genre, String date, String dateTime) {
     	List<MovieSchedule> movieList = new ArrayList<>();
         
-    	/* // デバッグ出力：受け取ったパラメータの確認
+    	///* // デバッグ出力：受け取ったパラメータの確認
         System.out.println("DAOが受け取ったパラメータ: movie_name=" + movie_name + 
                           ", cinema_id=" + cinema_id + 
                           ", genre=" + genre + 
                           ", date=" + date + 
-                          ", dateTime=" + dateTime); */
+                          ", dateTime=" + dateTime); 
+        //*/
     	
         StringBuilder sql = new StringBuilder(
             "SELECT c.cinema_name AS cinema_name, c.cinema_id AS cinema_id, m.movie_name AS movie_name, m.movie_id AS movie_id, " +
@@ -51,7 +48,7 @@ public class MovieScheduleDAO {
         List<String> conditions = new ArrayList<>();
         List<Object> params = new ArrayList<>();
         
-        //選択された映画感IDを使用した検索条件
+        //選択された映画館IDを使用した検索条件
         if (cinema_id != null && !cinema_id.isEmpty()) {
         	System.out.println(cinema_id);
             conditions.add("c.cinema_id = ?");
@@ -69,10 +66,15 @@ public class MovieScheduleDAO {
             params.add("%" + movie_name + "%");
         }
         
-        // 映画idの条件
+        //選択された作品IDを使用した検索条件
         if (movie_id != null && !movie_id.isEmpty()) {
-            conditions.add("LOWER(m.movie_id) LIKE LOWER(?)");
-            params.add("%" + movie_id + "%");
+        	System.out.println("作品ID条件を追加：" + movie_id);
+            conditions.add("m.movie_id = ?");
+            try {
+                params.add(Integer.parseInt(movie_id));
+            } catch (NumberFormatException e) {
+                System.out.println("無効なmovie_id: " + movie_id);
+            }
         }
 
         // ジャンルの条件
@@ -110,9 +112,10 @@ public class MovieScheduleDAO {
         
         sql.append(" ORDER BY c.cinema_name, m.movie_name, ms.movie_time ASC ");
         
-        //デバッグ出力
+        ///* //デバッグ出力
 		System.out.println("実行するSQL: " + sql);
 		System.out.println("バインドパラメータ: " + params);
+		//*/
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement st = con.prepareStatement(sql.toString())) {
@@ -121,6 +124,10 @@ public class MovieScheduleDAO {
             for (int i = 0; i < params.size(); i++) {
                 st.setObject(i + 1, params.get(i));
             }
+            
+            ///* //デバッグ出力
+    		System.out.println("実行するPreparedStatement: " + st);
+    		//*/
         	
             ResultSet rs = st.executeQuery();
             
@@ -136,61 +143,6 @@ public class MovieScheduleDAO {
     }
 
     
-    //重要！！後で移動！！！
-    //ジャンル検索の欄に、現在登録してあるジャンルを抽出するメソッド君    
-    public List<String> genreList(){
-    	Set<String> uniqueGenres = new HashSet<>(); // 重複削除のためのセット
-    	
-    	String sql = "SELECT movie_genre " +
-    				 "FROM Movie ; ";
-    	
-    	try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
-                PreparedStatement st = con.prepareStatement(sql);
-    			ResultSet rs = st.executeQuery()) {
-    		
-    		while (rs.next()) {
-    			
-				String genres = rs.getString("movie_genre");
-				
-				// ジャンルを分割＆重複を防ぐためにセットへ追加
-	            String[] splitGenres = genres.split(",");
-	            for (String genre : splitGenres) {
-	                uniqueGenres.add(genre.trim()); // 空白を削除してセットに追加
-	            }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    	 return new ArrayList<>(uniqueGenres); // Setをリスト化して返す
-    }
-    
-    //映画館を抽出するメソッド    
-    public List<TheaterSearch> theaterList(){
-    	List<TheaterSearch> theaterList = new ArrayList<>();
-    	
-    	String sql = "SELECT cinema_id, cinema_name " +
-    				 "FROM Cinema ; ";
-    	
-    	try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
-                PreparedStatement st = con.prepareStatement(sql)) {
-    		
-    		ResultSet rs = st.executeQuery();
-    		
-    		while (rs.next()) {
-    			String cinema_id = rs.getString("cinema_id");
-				String cinema_name = rs.getString("cinema_name");
-				TheaterSearch cName = new TheaterSearch(cinema_id,cinema_name);
-				
-				// リストに1行分のデータを追加する
-				theaterList.add(cName);
-            }
-    		
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return theaterList;
-    }
-    
     public List<MovieSchedule> makeMovieList(ResultSet rs)throws Exception{
 	
 	//全検索結果を格納するリストを準備
@@ -199,8 +151,8 @@ public class MovieScheduleDAO {
     	while(rs.next()) {
 			String cinema_name = rs.getString("cinema_name");
 			String cinema_id = rs.getString("cinema_id");
-			String movie_id = rs.getString("movie_id");
 			String movie_name = rs.getString("movie_name");
+			String movie_id = rs.getString("movie_id");
 			String movie_time = rs.getString("movie_time");
 			int ticket_price = rs.getInt("ticket_price");
 			

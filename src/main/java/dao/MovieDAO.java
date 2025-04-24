@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import model.data.Movie;
 
@@ -65,7 +70,34 @@ public class MovieDAO {
  		return movie;
     }
     
-    /*
+    //ジャンル検索の欄に、現在登録してあるジャンルを抽出するメソッド君    
+	public List<String> genreList(){
+		Set<String> uniqueGenres = new HashSet<>(); // 重複削除のためのセット
+		
+		String sql = "SELECT movie_genre " +
+					 "FROM Movie ; ";
+		
+		try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+	            PreparedStatement st = con.prepareStatement(sql);
+				ResultSet rs = st.executeQuery()) {
+			
+			while (rs.next()) {
+				
+				String genres = rs.getString("movie_genre");
+				
+				// ジャンルを分割＆重複を防ぐためにセットへ追加
+	            String[] splitGenres = genres.split(",");
+	            for (String genre : splitGenres) {
+	                uniqueGenres.add(genre.trim()); // 空白を削除してセットに追加
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+		 return new ArrayList<>(uniqueGenres); // Setをリスト化して返す
+	}
+
+	/*
      * ResultSet rsのデータを作品インスタンスに格納する
      * 
      * 引数：	ResultSet rs:

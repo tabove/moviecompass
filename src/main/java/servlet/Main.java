@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.MovieScheduleDAO;
+import model.data.Movie;
 import model.data.MovieSchedule;
 import model.data.TheaterSearch;
-import model.logic.GenreSearchLogic;
+import model.logic.CinemaSearchLogic;
 import model.logic.MovieScheduleSearchLogic;
+import model.logic.MovieSearchLogic;
 
 /**
  * Servlet implementation class Main
@@ -28,9 +29,8 @@ public class Main extends HttpServlet {
 		HttpSession session = request.getSession();
 				
 		MovieScheduleSearchLogic mssl = new MovieScheduleSearchLogic();
-		GenreSearchLogic gs = new GenreSearchLogic();
-		MovieScheduleDAO dao = new MovieScheduleDAO();
-//		SearchCondition searchCondition = new SearchCondition();
+		MovieSearchLogic movieSearch = new MovieSearchLogic();
+		CinemaSearchLogic cinemaSearch = new CinemaSearchLogic();
 		
 		// パラメータ取得
 		String cinema_id = request.getParameter("cinema_id");
@@ -50,8 +50,8 @@ public class Main extends HttpServlet {
 
 		
 	    // 検索に必要なリスト取得	
-	    List<TheaterSearch> theaterList = dao.theaterList();
-	    List<String> genreList = gs.getGenreList();
+	    List<TheaterSearch> theaterList = cinemaSearch.getTheaterList();
+	    List<String> genreList = movieSearch.getGenreList();
 	    
 		// Nullチェック（リファクタリング）
 		cinema_id = (cinema_id != null) ? cinema_id : "";
@@ -61,12 +61,15 @@ public class Main extends HttpServlet {
 		// 検索処理
 		List<MovieSchedule> results = mssl.searchMovie(cinema_id,movie_name, cinema_name, movie_id, genre, date, dateTime);
 		
+		Movie movie = movieSearch.search(movie_id);
+		
 		// セッションに検索条件保存
 		session.setAttribute("genreList", genreList);
 		session.setAttribute("theaterList", theaterList);
 
 		// 検索結果をリクエストスコープへ保存
 		request.setAttribute("searchResults", results);
+		request.setAttribute("movie", movie);
 		
 		// JSPへフォワード
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");

@@ -30,17 +30,8 @@ public class ReserveCinemaResult extends HttpServlet {
 		String ticket_price = request.getParameter("ticket_price");
 //		String torokubi = request.getParameter("torokubi");
 		
-//		String movie_time = movie_date + " " + movie_hour;
-		
-//		System.out.println(movie_time);
-//		System.out.println(movie_date);
-//		System.out.println(movie_hour);
 		// チケット単価を数値に変換する。
 		int repTicket_price = Integer.parseInt(ticket_price); 
-		
-//		 追加する項目を表したreservationインスタンスを準備
-//		Reservation reservation = new Reservation(user_id, cinema_id, movie_id,
-//				"", "", movie_time, repTicket_price);
 		
 		ReservationAddLogic reservationAddLogic = new ReservationAddLogic();
 		boolean isAdd = reservationAddLogic.add(user_id, cinema_id, movie_id, movie_time, repTicket_price);
